@@ -1,9 +1,8 @@
 #include <pthread.h>
-#include <semaphore.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include <unistd.h>
+#include <stdint.h>
 #include "mt19937ar.c"
 
 typedef struct 
@@ -23,8 +22,6 @@ typedef struct
 buffer_list buffer;
 
 pthread_cond_t prod_cond;
-
-int check_buffer();
 
 void consumer(void*);
 
@@ -158,10 +155,6 @@ void consumer(void *data)
    {
       if (buffer.last_item > -1)
       {
-         pthread_mutex_lock(&(buffer.lock));   
-         
-         pthread_mutex_unlock(&(buffer.lock));
- 
          printf("Consumer sleeping %d seconds.\n", buffer.items[buffer.last_item].wait);
          sleep(buffer.items[buffer.last_item].wait);
 
