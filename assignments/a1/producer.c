@@ -24,8 +24,6 @@ buffer_list buffer;
 
 pthread_cond_t prod_cond;
 
-int check_buffer();
-
 void consumer(void*);
 
 void producer(void*);
