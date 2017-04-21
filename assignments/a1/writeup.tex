@@ -1,0 +1,129 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage[margin=0.75in]{geometry}
+\begin{document}
+
+
+\section*{Log of commands used to boot the kernel on the VM}
+\subsection*{Terminal 1}
+\begin{enumerate}
+\item ssh user@access.engr.oregonstate.edu
+\item ssh os-class.engr.oregonstate.edu
+\item mkdir /scratch/spring2017/11-01
+\item cd /scratch/spring2017/11-01
+\item cp  /scratch/spring2017/files/core-image-lsb-sdk-qemux86.ext3 . 
+\item git clone git://git.yoctoproject.org/linux-yocto-3.14
+\item cd linux-yocto-3.14
+\item git checkout v3.14.26 
+\item source /scratch/opt/environment-setup-i586-poky-linux
+\item cp /scratch/spring2017/files/config-3.14.26-yocto-qemu .config
+\item make menuconfig
+\item /LOCALVERSION
+\item 1 then Enter
+\item "-11-01-hw1"
+\item "Save" and "Exit"
+\item make -j4 all (-j16 if you are in Kevin's Office)
+\item cd ..
+\item gdb
+\item Go to Terminal 2
+\item target remote :5611
+\item continue
+\end{enumerate}
+
+\subsection*{Terminal 2}
+\begin{enumerate}
+\item ssh user@access.engr.oregonstate.edu
+\item ssh os-class.engr.oregonstate.edu
+\item cd /scratch/spring2017/11-01
+\item source /scratch/opt/environment-setup-i586-poky-linux
+\item qemu-system-i386 -gdb tcp::5611 -S -nographic -kernel linux-yocto-3.14/arch/x86/boot/bzImage  -drive file=core-image-lsb-sdk-qemux86.ext3,if=virtio -enable-kvm -net none -usb -localtime --no-reboot --append "root=/dev/vda rw console=ttyS0 debug"
+\item note: you do not need to use GDB if you remove the -S flag from the qemu line and run this in terminal 1
+\item Go back to Terminal 1
+\end{enumerate}
+
+\section*{Qemu Flags}
+% Here is where I am getting info on flags: http://download.qemu.org/qemu-doc.html
+\subsection*{-gdb \textit{device}}
+This flag makes the system wait on a gdb connection and takes in an argument called device 
+which is typically a TCP-based connection.
+\subsection*{-S}
+Using this flag makes the CPU not start on start-up.
+\subsection*{-nographic}
+Disables graphical output from Qemu and makes interaction with Qemu purely through the 
+command line.
+\subsection*{-kernel \textit{bzImage}}
+Select which kernel image you want to use.
+\subsection*{-drive}
+Define a new drive.
+\subsection*{-enable-kvm}
+Enables KVM virtualization support. KVM stands for the Kernal-based Virtual Machine and allows
+us to run the kernel as a virtual machine.
+\subsection*{-net \textit{none}}
+This flag lets Qemu know that no network devices need to be configured.
+\subsection*{-usb}
+Enables USB driver.
+\subsection*{-localtime}
+Synchronize the kernal's clock to the system's localtime.
+\subsection*{-no-reboot}
+Exit instead of rebooting.
+\subsection*{--append \textit{cmdline}}
+Use the passed in \textit{cmdline} to add extra options to the kernel command line.
+
+\section*{Concurrency Questions:}
+\subsection*{What do you think the main point of this assignment is?}
+The main point of this assignment was to practice writing multi-threaded code which is 
+a completely different paradigm to what we are usually used to. This assignment also served as
+a refresher on pthreads which we covered in Operating Systems I. Concurrency is an important
+topic to learn and review because it is one of the most applicable and most used tools in the
+"real world".
+\subsection*{How did you personally approach the problem? Design decisions, algorithm, etc.}
+As a team, we started off by tackling the random number generation. We used the rrand example
+provided to us on the class website, and then we did our independent research to try and 
+figure out how to use the rrand assembly command to get random numbers. Once we had that and
+the Mersenne Twister we moved on to the main portion of the assignment.
+\\\\
+Earlier in the week in recitation we worked on the concurrency assignment there and that really
+helped us get a leg up on the one for this assignment. We started off by writing out all the
+function prototypes we needed and then we filled them in one at a time, testing it step by step.
+\subsection*{How did you ensure your solution was correct? Testing details, for instance}
+In order to make sure the consumer and producer threads were working as intended, we monitored the printed output in both functions while the program was running. At first, the consumer thread was not printing anything, and it was discovered that the consumer thread was not running until the buffer was completely full. Nothing ended up being enough of a bug to use GDB, but there were a few bumps that the output was helpful in solving.
+\subsection*{What did you learn?}
+We learned a lot about the OS-class server and how to set it up. 
+Along with the fact that it can be a pain and making one small mistake messes everything up. 
+Always double check every step of the instructions to make sure things copied over correctly. 
+We learned how to navigate the OS environment that we are going to be building, how to name our assignments, and how to build the OS kernel. 
+Following this I think our team would agree that we learned a good deal about parallel threads, multiprocessing, and how to avoid race conditions.
+
+\section*{Version Control Log}
+\begin{tabular}{l l l}\textbf{Detail} & \textbf{Author} & \textbf{Description}\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/cdc651bc4b8ba45b06f74db037861af15b474f27}{cdc651b} & Tanner & Initial commit\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/cb7ab8708f9e44b8d202ec5f31d6c197004bd27f}{cb7ab87} & Heidi & Add philosopher problem and recitation folder.\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/538b6e77e7635c2b6fd9a6c3b8e4c09f50921ccd}{538b6e7} & Tanner & Merge pull request \#1 from heidiaclayton/master\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/ed6d744275ec587699c9d0830a1bfa5dce6bbbf5}{ed6d744} & Heidi & Assignment 1 skeleton.\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/0be9a4d21ca938bd1eb5ef78fe7c9e46b8718630}{0be9a4d} & heidiaclayton & Merge pull request \#2 from heidiaclayton/master\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/a342fda38762b9a6df9273870c1f502b429e5160}{a342fda} & Heidi & Assignment 1 WIP\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/dd35b7a5dc7006691dab998cad98e3042cac04dc}{dd35b7a} & heidiaclayton & Merge pull request \#3 from heidiaclayton/master\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/fd4ac367a5425a013e711d918fc12b11e055f353}{fd4ac36} & Heidi & Finish producer problem.\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/cdc4135f68d1931fff4c16ef7c28a1f5fc871556}{cdc4135} & heidiaclayton & Merge pull request \#4 from heidiaclayton/master\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/570ad855dd81493a1a123a3079c62b8f6d353ce6}{570ad85} & heidiaclayton & Update producer.c\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/a337fa56dbcbd2403bd03ef91cdc6c239c4ca27b}{a337fa5} & heidiaclayton & Update producer.c\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/34fdd655d953e532763ac4de4d0f164fa68f3a18}{34fdd65} & Heidi & Remove unnecessary includes and function prototype.\\\hline
+	\href{https://github.com/TFry/cs444group1/commit/d68e3ae8e9144df387fc89141f08662dc6d766e7}{d68e3ae} & heidiaclayton & Merge pull request \#5 from heidiaclayton/master\\\hline\end{tabular}
+
+\section*{Work Log}
+We started working on the main part of assignment 1 in recitation of week 2. In the hour of 
+class time we got the menuconfig configured for homework 1 but we didn't get as far as booting
+the kernel because there were a few confusing steps in the recitation demo. Monday of week 3
+we met up in Kelley to finish up the kernel assignment. Using the notes the TA provided we were
+able to build the kernel and boot it up on the VM.
+\\\\
+As for the concurrency assignment, we reserved a room in the library Thursday of week 3 and
+spent 3 hours working through it. We made a good amount of progress, including implementing
+a random function as well as setting up working pthreads. We used the online IDE cloud9 to
+collaborate on the assignment. This was a little tough to navigate for our first assignment,
+but it provided a nice environment for compiling and running the C program. Later that night
+Heidi took it upon herself to finish the last few functions of the implementation.
+
+
+\end{document}
