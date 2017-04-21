@@ -14,15 +14,16 @@ typedef struct
 
 typedef struct 
 {
-	buff_item buffer[32];
+	buff_item items[32];
 	pthread_mutex_t lock;
-	int producer_buff_location;
-	int consumer_buff_location;
+	int last_item;
 } buffer_list;
 
 
 buffer_list buffer;
-pthread_cond_t consumer_condition, producer_condition;
+
+pthread_cond_t prod_cond;
+
 int check_buffer();
 
 void consumer(void*);
@@ -40,10 +41,8 @@ int main(int argc, char **argv)
    int i;
    pthread_t *producers;
    pthread_t *consumers;
-   void* consume_func = consumer;
-   void* produce_func = producer;
-   pthread_cond_init(&consumer_condition, NULL);
-   pthread_cond_init(&producer_condition, NULL);
+  
+   pthread_cond_init(&prod_cond, NULL);
    
    if (argc <= 1)
    {
@@ -60,23 +59,32 @@ int main(int argc, char **argv)
    consumers = malloc(sizeof(pthread_t) * num_threads);
    
    // initialize buffer
+
+   buffer.last_item = -1;
    for (i = 0; i < 32; i++)
    {
-      buffer.buffer[i].item = 0;
-      buffer.buffer[i].wait = 0;
+      buffer.items[i].item = 0;
+      buffer.items[i].wait = 0;
    }
    
+   // initialize mutex   
    pthread_mutex_init(&(buffer.lock), NULL);
    
+   // initialize threads
    for (i = 0; i < num_threads; i++)
    {
-      pthread_create(&producers[i], NULL, produce_func, NULL);
-      pthread_create(&consumers[i], NULL, consume_func, NULL);
-      pthread_join(producers[i], NULL);
+      // pass in functions to threads
+      pthread_create(&producers[i], NULL, (void*)consumer, NULL);
+      pthread_create(&consumers[i], NULL, (void*)producer, NULL);
       pthread_join(consumers[i], NULL);
+      pthread_join(producers[i], NULL);
    }
    
+   // clean up
    pthread_mutex_destroy(&(buffer.lock));
+
+   pthread_cond_destroy(&prod_cond);
+
    free(producers);
    free(consumers);
    
@@ -92,7 +100,8 @@ int rdrand32_step (uint32_t *rand) {
     return (int) ok;
 }
 
-unsigned long random_gen(int top_val, int low_val) 
+// taken from course materials and Intel documentation
+unsigned long random_gen() 
 {
 
 	unsigned int eax;
@@ -115,57 +124,92 @@ unsigned long random_gen(int top_val, int low_val)
 	                     : "a"(eax)
 	                     );
 	
-	if (0)
+	if (ecx & 0x40000000)
 	{
-      rdrand32_step(&x);
-      return x % top_val + low_val;
+           rdrand32_step(&x);
+           return x;
 	}
 	
 	else
 	{
 	   init_genrand(seed);
- 	   return abs(genrand_int32()) % top_val + low_val;
+ 	   return abs(genrand_int32());
 	}
 
 }
 
+// creates new item. arbitrarily chose 1 and 50 as bounds
+// since it is not specified in assignment.
 buff_item produce_item()
 {
    buff_item new_item;
-   new_item.wait = random_gen(2, 9);
-   new_item.item = random_gen(1, 50);
+   new_item.wait = random_gen() % 8 + 2;
+   new_item.item = random_gen() % 50 + 1;
    
    return new_item;
 }
-/*
-void consumer(void * data) {
-   // Lock
-   pthread_mutex_lock(&buffer.lock);
 
-   while(buffer.producer_buff_location == 0) {
-      sleep(1);
-   }
-   buff_item item = buffer.buffer[buffer.consumer_buff_location];
-   buffer.consumer_buff_location++;
-   if(buffer.consumer_buff_location >= 32) {
-       buffer.consumer_buff_location = 0;
-   }
-   int value = item.item;
-   int wait  = item.wait;
-   printf("%d \n", value);
-   sleep(wait);
-   pthread_mutex_unlock(&buffer.lock);
-}
-*/
-
-int check_buffer()
+// runs the consumer thread
+void consumer(void *data)
 {
-   int i = -1;
-   
-   while(buffer.buffer[i + 1].item != 0)
+   int sleep_time;
+
+   while (1)
    {
-      i++;
+      if (buffer.last_item > -1)
+      {
+         pthread_mutex_lock(&(buffer.lock));   
+         
+         pthread_mutex_unlock(&(buffer.lock));
+ 
+         printf("Consumer sleeping %d seconds.\n", buffer.items[buffer.last_item].wait);
+         sleep(buffer.items[buffer.last_item].wait);
+
+         printf("Consumed: item = %d, wait = %d.\n", buffer.items[buffer.last_item].item, buffer.items[buffer.last_item].wait);
+
+         pthread_mutex_lock(&(buffer.lock));
+         buffer.items[buffer.last_item].item = 0;
+         buffer.items[buffer.last_item].wait = 0;
+         buffer.last_item--;
+
+         pthread_cond_signal(&prod_cond);
+         pthread_mutex_unlock(&(buffer.lock));
+      }
    }
-   
-   return i;
+   pthread_exit(NULL);
 }
+
+// runs the producer thread
+void producer(void *data)
+{
+   int sleep_time;
+
+   while (1)
+   {      
+      sleep_time = random_gen() % 5 + 3;
+
+      printf("Producer is sleeping %d seconds.\n", sleep_time);
+ 
+      sleep(sleep_time);
+
+      pthread_mutex_lock(&(buffer.lock));
+
+      // wait until buffer has available space
+      while (buffer.last_item == 31)
+      {
+         pthread_cond_wait(&prod_cond, &(buffer.lock));
+      }
+      
+      // "produce"
+      buffer.items[buffer.last_item + 1] = produce_item();
+      buffer.last_item++;   
+
+      printf("Produced: item = %d, wait = %d\n", buffer.items[buffer.last_item].item, buffer.items[buffer.last_item].wait);
+      
+      pthread_mutex_unlock(&(buffer.lock));
+       
+   }
+   // clean up
+   pthread_exit(0);
+}
+
