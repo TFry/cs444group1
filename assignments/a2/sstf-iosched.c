@@ -21,9 +21,9 @@ static void sstf_merged_requests(struct request_queue *q, struct request *rq,
 	list_del_init(&next->queuelist);
 }
 
-static int clook_dispatch(struct request_queue *q, int force)
+static int sstf_dispatch(struct request_queue *q, int force)
 {
-	struct clook_data *nd = q->elevator->elevator_data;
+	struct sstf_data *nd = q->elevator->elevator_data;
 
 	if (!list_empty(&nd->queue)) {
 		struct request *rq;
@@ -38,7 +38,7 @@ static int clook_dispatch(struct request_queue *q, int force)
 			direction = 'R';
 		else
 			direction = 'W';
-		printk("[CLOOK] dsp %c %lu\n", direction, blk_rq_pos(rq));
+		printk("[sstf] dsp %c %lu\n", direction, blk_rq_pos(rq));
 
 		return 1;
 	}
@@ -112,7 +112,7 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 
 	
 	//Print added request
-	printk("[CLOOK] add %c %llu\n", up_down, blk_rq_pos(rq));
+	printk("[sstf] add %c %llu\n", up_down, blk_rq_pos(rq));
 
 	
 	//Printing out the entire queue just for debugging
@@ -130,30 +130,48 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 static struct request *
 sstf_former_request(struct request_queue *q, struct request *rq)
 {
+	struct sstf_data *nd = q->elevator->elevator_data;
 
+	if (rq->queuelist.prev == &nd->queue)
+		return NULL;
+	return list_entry(rq->queuelist.prev, struct request, queuelist);
 }
 
 static struct request *
 sstf_latter_request(struct request_queue *q, struct request *rq)
 {
+	struct sstf_data *nd = q->elevator->elevator_data;
 
+	if (rq->queuelist.next == &nd->queue)
+		return NULL;
+	return list_entry(rq->queuelist.next, struct request, queuelist);
 }
 
-static int sstf_init_queue(struct request_queue *q, struct elevator_type *e)
+static void *sstf_init_queue(struct request_queue *q)
 {
+	struct sstf_data *nd;
 
+	nd = kmalloc_node(sizeof(*nd), GFP_KERNEL, q->node);
+	if (!nd)
+		return NULL;
+	INIT_LIST_HEAD(&nd->queue);
+	return nd;
 }
 
 static void sstf_exit_queue(struct elevator_queue *e)
 {
+	struct sstf_data *nd = e->elevator_data;
 
+	BUG_ON(!list_empty(&nd->queue));
+	kfree(nd);
 }
 
 static struct elevator_type elevator_sstf = {
-	.ops.sq = {
+	.ops = {
 		.elevator_merge_req_fn		= sstf_merged_requests,
 		.elevator_dispatch_fn		= sstf_dispatch,
 		.elevator_add_req_fn		= sstf_add_request,
+		.elevator_queue_empty_fn	= sstf_queue_empty,
 		.elevator_former_req_fn		= sstf_former_request,
 		.elevator_latter_req_fn		= sstf_latter_request,
 		.elevator_init_fn		= sstf_init_queue,
@@ -163,11 +181,11 @@ static struct elevator_type elevator_sstf = {
 	.elevator_owner = THIS_MODULE,
 };
 
-
-
 static int __init sstf_init(void)
 {
-	return elv_register(&elevator_sstf);
+	elv_register(&elevator_sstf);
+
+	return 0;
 }
 
 static void __exit sstf_exit(void)
@@ -179,6 +197,6 @@ module_init(sstf_init);
 module_exit(sstf_exit);
 
 
-MODULE_AUTHOR("Team 11-01");
+MODULE_AUTHOR("Jens Axboe");
 MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("SSTF IO scheduler");
+MODULE_DESCRIPTION("sstf IO scheduler");
