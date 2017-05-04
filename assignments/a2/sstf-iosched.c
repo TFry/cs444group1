@@ -47,7 +47,7 @@ static int sstf_dispatch(struct request_queue *q, int force)
 
 static void sstf_add_request(struct request_queue *q, struct request *rq)
 {
-	struct noop_data *nd = q->elevator->elevator_data;
+	struct sstf_data *nd = q->elevator->elevator_data;
 	struct list_head *cur = NULL;
 	struct list_head *cur1 = NULL;
 	struct list_head *cur2 = NULL;
