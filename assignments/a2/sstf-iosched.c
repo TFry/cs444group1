@@ -60,7 +60,7 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 	//Checking if request is smaller or larger than head
 	list_for_each(cur, &nd->queue){
 		struct request *c = list_entry(cur, struct request, queuelist);
-		if(rq_end(rq) > rq_end(c)){
+		if(blk_rq_pos(rq) > blk_rq_pos(c)){
 			is_larger_than_head=1;
 			break;
 		}
@@ -78,7 +78,7 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 			list_for_each(cur2, &nd->queue)	
 			{	
 				struct request *h = list_entry(cur2, struct request, queuelist);	
-				if(rq_end(h) > rq_end(rq))
+				if(blk_rq_pos(h) > blk_rq_pos(rq))
 					break;
 			}
 		}
@@ -92,12 +92,12 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 			list_for_each(cur2, &nd->queue)
 			{
 				struct request *g = list_entry(cur2, struct request, queuelist);
-				if(rq_end_sector(g) > rq_end_sector(rq) && circled_already)
+				if(blk_rq_pos_sector(g) > blk_rq_pos_sector(rq) && circled_already)
 					break;
-				if(prev_checker > rq_end_sector(g))
+				if(prev_checker > blk_rq_pos_sector(g))
 					circled_already=1;	
 					
-				prev_checker= rq_end_sector(g);	
+				prev_checker= blk_rq_pos_sector(g);	
 			}	
 		}
 		
