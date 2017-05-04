@@ -21,42 +21,42 @@ static void sstf_merged_requests(struct request_queue *q, struct request *rq,
 	list_del_init(&next->queuelist);
 }
 
-static int sstf_dispatch(struct request_queue *q, int force)
+static int clook_dispatch(struct request_queue *q, int force)
 {
-	struct sstf_data *helper = q->elevator->elevator_data;
-	if(!list_empty(&helper->queue)){
-		struct request *r;
-		char up_down;
-		
-		r = list_entry(helper->queue.next, struct request, queuelist);
-		list_del_init(&r->queuelist);
-		elevator_dispatch_sort(q, r);
-		
-		if(r_data_dir(r) == READ){
-			up_down = 'R';
-		}
-		else{
-			up_down = 'W';
-		}
-		printk("[CLOOK] direction %c %llu\n",up_down, blk_rq_pos(r));
-		
+	struct clook_data *nd = q->elevator->elevator_data;
+
+	if (!list_empty(&nd->queue)) {
+		struct request *rq;
+		rq = list_entry(nd->queue.next, struct request, queuelist);
+		list_del_init(&rq->queuelist);
+		elv_dispatch_sort(q, rq);
+		diskhead = blk_rq_pos(rq); //assign position to disk head
+
+		//print whether data is being read or write
+		char direction;
+		if(rq_data_dir(rq) == READ)
+			direction = 'R';
+		else
+			direction = 'W';
+		printk("[CLOOK] dsp %c %lu\n", direction, blk_rq_pos(rq));
+
 		return 1;
 	}
 	return 0;
-	
 }
 
 static void sstf_add_request(struct request_queue *q, struct request *rq)
 {
-	struct noop_data *helper = q->elevator->elevator_data;
+	struct noop_data *nd = q->elevator->elevator_data;
 	struct list_head *cur = NULL;
-	struct list_head *cur2 = NULL;
 	struct list_head *cur1 = NULL;
+	struct list_head *cur2 = NULL;
+	
 
 	bool is_larger_than_head;
 	
 	//Checking if request is smaller or larger than head
-	list_for_each(cur, &helper->queue){
+	list_for_each(cur, &nd->queue){
 		struct request *c = list_entry(cur, struct request, queuelist);
 		if(rq_end(rq) > rq_end(c)){
 			is_larger_than_head=1;
@@ -73,7 +73,7 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 	//Thus we are sorted
 	if(is_larger_than_head)
 		{	
-			list_for_each(cur2, &helper->queue)	
+			list_for_each(cur2, &nd->queue)	
 			{	
 				struct request *h = list_entry(cur2, struct request, queuelist);	
 				if(rq_end(h) > rq_end(rq))
@@ -87,7 +87,7 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 		else
 		{	bool prev_checker= 0;
 			bool circled_already=0;
-			list_for_each(cur2, &helper->queue)
+			list_for_each(cur2, &nd->queue)
 			{
 				struct request *g = list_entry(cur2, struct request, queuelist);
 				if(rq_end_sector(g) > rq_end_sector(rq) && circled_already)
@@ -117,7 +117,7 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 	
 	//Printing out the entire queue just for debugging
 	printk("current queue: ");	
-       	list_for_each(cur1, &helper->queue)
+       	list_for_each(cur1, &nd->queue)
 	{
 		struct request *f = list_entry(cur1, struct request, queuelist);	
 	
