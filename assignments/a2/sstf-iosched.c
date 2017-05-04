@@ -24,21 +24,22 @@ static void sstf_merged_requests(struct request_queue *q, struct request *rq,
 static int sstf_dispatch(struct request_queue *q, int force)
 {
 	struct sstf_data *nd = q->elevator->elevator_data;
+	char direction;
 
 	if (!list_empty(&nd->queue)) {
 		struct request *rq;
 		rq = list_entry(nd->queue.next, struct request, queuelist);
 		list_del_init(&rq->queuelist);
 		elv_dispatch_sort(q, rq);
-		/*disk_head = blk_rq_pos(rq); //assign position to disk head
+		disk_head = blk_rq_pos(rq); //assign position to disk head
 
 		//print whether data is being read or write
-		char direction;
+		
 		if(rq_data_dir(rq) == READ)
 			direction = 'R';
 		else
 			direction = 'W';
-		printk("[sstf] dsp %c %lu\n", direction, blk_rq_pos(rq));*/
+		printk("[sstf] dsp %c %lu\n", direction, blk_rq_pos(rq));
 
 		return 1;
 	}
@@ -51,6 +52,7 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 	struct list_head *cur = NULL;
 	struct list_head *cur1 = NULL;
 	struct list_head *cur2 = NULL;
+	char up_down;
 	
 
 	bool is_larger_than_head;
@@ -104,7 +106,6 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 
 	//Set the read or write
 	//head up or head down
-	char up_down;
 	if(rq_data_dir(rq) == READ)
 		up_down = 'R';
 	else
@@ -171,7 +172,6 @@ static struct elevator_type elevator_sstf = {
 		.elevator_merge_req_fn		= sstf_merged_requests,
 		.elevator_dispatch_fn		= sstf_dispatch,
 		.elevator_add_req_fn		= sstf_add_request,
-		.elevator_queue_empty_fn	= sstf_queue_empty,
 		.elevator_former_req_fn		= sstf_former_request,
 		.elevator_latter_req_fn		= sstf_latter_request,
 		.elevator_init_fn		= sstf_init_queue,
