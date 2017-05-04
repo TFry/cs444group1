@@ -30,7 +30,7 @@ static int sstf_dispatch(struct request_queue *q, int force)
 		rq = list_entry(nd->queue.next, struct request, queuelist);
 		list_del_init(&rq->queuelist);
 		elv_dispatch_sort(q, rq);
-		disk_head = blk_rq_pos(rq); //assign position to disk head
+		/*disk_head = blk_rq_pos(rq); //assign position to disk head
 
 		//print whether data is being read or write
 		char direction;
@@ -38,7 +38,7 @@ static int sstf_dispatch(struct request_queue *q, int force)
 			direction = 'R';
 		else
 			direction = 'W';
-		printk("[sstf] dsp %c %lu\n", direction, blk_rq_pos(rq));
+		printk("[sstf] dsp %c %lu\n", direction, blk_rq_pos(rq));*/
 
 		return 1;
 	}
