@@ -92,12 +92,12 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 			list_for_each(cur2, &nd->queue)
 			{
 				struct request *g = list_entry(cur2, struct request, queuelist);
-				if(blk_rq_pos_sector(g) > blk_rq_pos_sector(rq) && circled_already)
+				if(rq_end_sector(g) > rq_end_sector(rq) && circled_already)
 					break;
-				if(prev_checker > blk_rq_pos_sector(g))
+				if(prev_checker > rq_end_sector(g))
 					circled_already=1;	
 					
-				prev_checker= blk_rq_pos_sector(g);	
+				prev_checker= rq_end_sector(g);	
 			}	
 		}
 		
