@@ -40,7 +40,7 @@ static int sstf_dispatch(struct request_queue *q, int force)
                 {
 			printk("There are more than one request.\n");
 
-			if (nd->direction == "B")
+			if (nd->direction == 'B')
 			{
 				printk("Going backward in queue.\n");
 
@@ -53,8 +53,8 @@ static int sstf_dispatch(struct request_queue *q, int force)
 				// otherwise, dispatch next
 				else
 				{
-					req = next;
-					nd->direction = "F";
+					rq = next;
+					nd->direction = 'F';
 				}
 			}
 			
@@ -70,8 +70,8 @@ static int sstf_dispatch(struct request_queue *q, int force)
 
 				else
 				{
-					req = prev;
-					nd->direction = "B";
+					rq = prev;
+					nd->direction = 'B';
 				}
 			}
 		}
@@ -88,7 +88,6 @@ static int sstf_dispatch(struct request_queue *q, int force)
 static void sstf_add_request(struct request_queue *q, struct request *rq)
 {
 	struct sstf_data *nd = q->elevator->elevator_data;
-        struct list_head *ptr;
 	struct request *prev, *next;
 
 	printk("Inside add_request function.\n");
