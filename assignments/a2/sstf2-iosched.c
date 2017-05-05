@@ -103,8 +103,8 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 		// iterating until correct position is found
 		while (blk_rq_pos(next) <= blk_rq_pos(rq))
 		{
-			prev = list_entry(prev->queue.prev, struct request, queuelist);
-			next = list_entry(next->queue.next, struct request, queuelist);	
+			prev = list_entry(prev->queuelist.prev, struct request, queuelist);
+			next = list_entry(next->queuelist.next, struct request, queuelist);	
 		}
 		
 		// add request to list
