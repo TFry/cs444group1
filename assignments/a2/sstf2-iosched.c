@@ -10,6 +10,7 @@
 
 struct sstf_data {
 	struct list_head queue;
+	char direction;
 	sector_t sector;
 };
 
@@ -40,18 +41,35 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
 {
 	struct sstf_data *nd = q->elevator->elevator_data;
         struct list_head *ptr;
+	struct request *prev, *next;
 
-	// iterate over list until position for insertion
-	// is found
-	list_for_each(ptr, &nd->queue) {
-		struct request *cur = list_entry(ptr, struct request, queuelist);
-		if (blk_rq_pos(rq) < blk_rq_pos(cur))
-                {
-			break;
+	printk("Inside add_request.\n");
+
+	if (!list_empty(&nd->queue))
+	{
+		printk("List not empty, insertion sort.\n");
+		prev = list_entry(nd->queue.prev, struct request, queuelist);
+		next = list_entry(nd->queue.next, struct request, queuelist);
+
+		// iterating until correct position is found
+		while (blk_rq_pos(next) <= blk_rq_pos(rq))
+		{
+			prev = list_entry(prev->queue.prev, struct request, queuelist);
+			next = list_entry(next->queue.next, struct request, queuelist);	
 		}
+		
+		// add request to list
+		list_add(&rq->queuelist, &prev->queuelist);
 	}
 
-	list_add_tail(&rq->queuelist, ptr);
+	else
+	{
+		printk("List is empty, just add.\n");
+
+		list_add(&rq->queuelist, &nd->queue);
+	}
+
+	printk("Request added.\n");
 }
 
 static struct request *
