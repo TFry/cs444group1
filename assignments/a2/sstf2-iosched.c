@@ -27,14 +27,15 @@ static int sstf_dispatch(struct request_queue *q, int force)
 	printk("Inside dispatch function.\n");
 	if (!list_empty(&nd->queue)) {
 		struct request *rq, *prev, *next;
-		
-		rq = next;
 
 		printk("List not empty.\n");
 		
 		// get previous and next nodes
 		prev = list_entry(nd->queue.prev, struct request, queuelist);
 		next = list_entry(nd->queue.next, struct request, queuelist);
+
+		// just use next if there's only one request
+		rq = next;
 
 		if (prev != next)
                 {
