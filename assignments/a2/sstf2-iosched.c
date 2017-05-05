@@ -23,15 +23,63 @@ static void sstf_merged_requests(struct request_queue *q, struct request *rq,
 static int sstf_dispatch(struct request_queue *q, int force)
 {
 	struct sstf_data *nd = q->elevator->elevator_data;
-
+	
+	printk("Inside dispatch function.\n");
 	if (!list_empty(&nd->queue)) {
-		struct request *rq;
-		rq = list_entry(nd->queue.next, struct request, queuelist);
-		list_del_init(&rq->queuelist);
-		elv_dispatch_sort(q, rq);
+		struct request *rq, *prev, *next;
 		
-		// give nd rq's old position
-		nd->sector = rq->__sector;
+		rq = next;
+
+		printk("List not empty.\n");
+		
+		// get previous and next nodes
+		prev = list_entry(nd->queue.prev, struct request, queuelist);
+		next = list_entry(nd->queue.next, struct request, queuelist);
+
+		if (prev != next)
+                {
+			printk("There are more than one request.\n");
+
+			if (nd->direction == "B")
+			{
+				printk("Going backward in queue.\n");
+
+				// if prev position is less than nd, dispatch prev
+				if (nd->sector >= blk_rq_pos(prev))
+				{
+					rq = prev;
+				}
+
+				// otherwise, dispatch next
+				else
+				{
+					req = next;
+					nd->direction = "F";
+				}
+			}
+			
+			else
+			{
+				printk("Going forward in queue.\n");
+
+				// if next position is less than nd, dispatch next
+				if (nd->sector >= blk_rq_pos(next))
+				{
+					rq = next;
+				}
+
+				else
+				{
+					req = prev;
+					nd->direction = "B";
+				}
+			}
+		}
+
+		list_del_init(&rq->queuelist);
+		elv_dispatch_add_tail(q, rq);
+		nd->sector = blk_rq_sectors(rq) + blk_rq_pos(rq);
+		printk("Dispatched.\n");
 		return 1;
 	}
 	return 0;
@@ -43,11 +91,13 @@ static void sstf_add_request(struct request_queue *q, struct request *rq)
         struct list_head *ptr;
 	struct request *prev, *next;
 
-	printk("Inside add_request.\n");
+	printk("Inside add_request function.\n");
 
 	if (!list_empty(&nd->queue))
 	{
 		printk("List not empty, insertion sort.\n");
+
+		// get previous and next nodes
 		prev = list_entry(nd->queue.prev, struct request, queuelist);
 		next = list_entry(nd->queue.next, struct request, queuelist);
 
@@ -107,8 +157,9 @@ static int sstf_init_queue(struct request_queue *q, struct elevator_type *e)
 		return -ENOMEM;
 	}
 
-	// default position of 0
+	// default position of 0, forward
 	nd->sector = 0;
+	nd->direction = 'F';
 	eq->elevator_data = nd;
 
 	INIT_LIST_HEAD(&nd->queue);
