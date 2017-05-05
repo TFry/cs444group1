@@ -8,11 +8,9 @@
 #include <linux/slab.h>
 #include <linux/init.h>
 
-//Set disk
-int disk_head = -1;
-
 struct sstf_data {
 	struct list_head queue;
+	sector_t sector;
 };
 
 static void sstf_merged_requests(struct request_queue *q, struct request *rq,
@@ -24,15 +22,13 @@ static void sstf_merged_requests(struct request_queue *q, struct request *rq,
 static int sstf_dispatch(struct request_queue *q, int force)
 {
 	struct sstf_data *nd = q->elevator->elevator_data;
-	char direction;
 
 	if (!list_empty(&nd->queue)) {
 		struct request *rq;
 		rq = list_entry(nd->queue.next, struct request, queuelist);
 		list_del_init(&rq->queuelist);
 		elv_dispatch_sort(q, rq);
-		//disk_head = blk_rq_pos(rq); //assign position to disk head
-
+		
 		// give nd rq's old position
 		nd->sector = rq->__sector;
 		return 1;
@@ -105,7 +101,6 @@ static int sstf_init_queue(struct request_queue *q, struct elevator_type *e)
 	return 0;
 }
 
-
 static void sstf_exit_queue(struct elevator_queue *e)
 {
 	struct sstf_data *nd = e->elevator_data;
@@ -130,8 +125,6 @@ static struct elevator_type elevator_sstf = {
 
 static int __init sstf_init(void)
 {
-	//elv_register(&elevator_sstf);
-	//Return elv_register rather than 0
 	return elv_register(&elevator_sstf);
 }
 
@@ -144,6 +137,6 @@ module_init(sstf_init);
 module_exit(sstf_exit);
 
 
-MODULE_AUTHOR("Jens Axboe");
+MODULE_AUTHOR("Group 11-01");
 MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("sstf IO scheduler");
+MODULE_DESCRIPTION("SSTF IO scheduler");
