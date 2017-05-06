@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage[margin=0.75in]{geometry}
+\begin{document}
+
+
+
+\section*{SSTF Design:}
+\subsection*{Using No-op}
+Basically we started with the No-op file. From there we figured that we only needed to modify the data struct and add request and dispatch functions to properly complete the assignment. We add a direction and sector field to the data struct. The rest of the code was still valid for our use, and as Kevin said the actual code modification is small it is just complex.
+\subsection*{Add Request}
+The add request function iterated through the list until it found the appropriate place for the current request and then inserted it (i.e. insertion sort). It was fairly simple, but the linked list macros were definitely something to get used to.
+
+\subsection*{Dispatch}
+Dispatching was quite a bit different in SSTF than No-op, essentially just going up until it can't go up and then going down until it can't go down. The function ended up being a lot longer than that of the No-op scheduler.
+
+\section{Group Process}
+As a team, we started off by tackling the concurrency problem. We had done some work from the previous weeks recitation so the amount we had to do was considerably less. Basically it was just a matter of handling multiple threads and mutexes. Heidi and David focused more on the concurrency assignment code, while Tanner did more work on the sstf. We met on Thursday to polish up both sets of code and test the sstf elevator on our VM. 
+\section{Main Point of the Assignment}
+The concurrency section was just to get us more practice with threads and mutexes, and to help us think about different ways to problems. The SSTF was a more complex program to give us a better idea of how the Kernel handles thing and how we can handle disk I/O requests across a read write head. We implemented a clook method that goes in a single direction at a time. It was an interesting lesson in how to handle multiple data structures on a physical operating part of the OS (granted it is being ran on a VM). 
+\\\\
+Earlier in the week in recitation we worked on the concurrency assignment there and that really
+helped us get a leg up on the one for this assignment. We started off by writing out all the
+function prototypes we needed and then we filled them in one at a time, testing it step by step.
+\subsection*{How did you ensure your solution was correct? Testing details, for instance}
+We used a testing script we found \href{https://github.com/fusion2004/cop4610/blob/master/lab4/test.sh}{Link to github}. Basically the script writes and reads from two files along with using piping to make sure everything is done correctly. It counts out the values to ensure validity. 
+\subsection*{What did you learn?}
+We learned a lot about the OS-class server and how to set it up. 
+Along with the fact that it can be a pain and making one small mistake messes everything up. 
+Always double check every step of the instructions to make sure things copied over correctly. 
+We learned how to navigate the OS environment that we are going to be building, how to name our assignments, and how to build the OS kernel. 
+Following this I think our team would agree that we learned a good deal about parallel threads, multiprocessing, and how to avoid race conditions.
+We learned how to make the kernel run with out scheduler.
+How to test a scheduler correctly on the kernel VM. 
+And we also got more practice at concurrency. 
+
+\section*{Version Control Log}
+\begin{tabular}{ l | c | r }
+  \hline	
+f7ce001ffefc1e6d4e4a1401c784b8e9676e274c & heidiaclayton&  Fri, 5 May 2017 21:39:16 -0700 \\
+7f366c5ee3bf272c4d62118ab0672f5994c8e120 & heidiaclayton&  Fri, 5 May 2017 19:27:30 -0700 \\
+129c0a4da93e7fbf8176165e7a6b3e6641268ce1 & heidiaclayton&  Fri, 5 May 2017 18:48:08 -0700 \\
+2c92d47c1ae99494c813cf096d7f2a853cd8b2ed & heidiaclayton&  Fri, 5 May 2017 16:50:58 -0700 \\
+9c0b6ad995985cba166adae2ea5e47b37347cba4 & heidiaclayton&  Fri, 5 May 2017 16:46:36 -0700 \\
+cc123edf21f14c410da416234125306b4fee291c & heidiaclayton&  Fri, 5 May 2017 16:36:50 -0700 \\
+ca3527a07d50c2697a77c93b0a6bc4243eafeaa7 & heidiaclayton&  Fri, 5 May 2017 16:27:14 -0700 \\
+9445c460d6c11b914baea9ab9614919548a40c39 & heidiaclayton&  Fri, 5 May 2017 15:50:44 -0700 \\
+c5d62c73ba47266a3a187e34c0e7d83093ac4745 & tfry&  Fri, 5 May 2017 15:04:51 -0700 \\
+9d56b7aea9cf25fa3dc6f921c4e7a0401e720f5b & tfry&  Thu, 4 May 2017 11:30:30 -0700 \\
+42341f1ba4257c19906ab3cf8faf6798827ec345 & tfry&  Thu, 4 May 2017 11:25:04 -0700 \\
+3fb280dba0e73170cce90935fd8fb50a95afb193 & David Teofilovic&  Thu, 4 May 2017 11:22:15 -0700 \\
+5dcf683f38eed3bee1953813a862228ea20d285d & tfry&  Thu, 4 May 2017 11:15:59 -0700 \\
+15c28f17088136e6b95ca3217f74f556e4888a1f & tfry&  Thu, 4 May 2017 11:14:49 -0700 \\
+a273f66fc26d38d0a71586908ee43194e8b117a0 & David Teofilovic&  Thu, 4 May 2017 11:04:28 -0700 \\
+bc4091269d916f0b99dba5d88ed125b122351a91 & David Teofilovic&  Thu, 4 May 2017 11:04:17 -0700 \\
+74dc5bfdb8f1515eefbc6615fb3ded3321dc2506 & tfry&  Thu, 4 May 2017 10:28:01 -0700 \\
+3af39b8432a1c063fd971d96e6e0eccb13f1297f & tfry&  Thu, 4 May 2017 10:24:06 -0700 \\
+de7b91758d4f4016d60056ebeec21f5fb50ef388 & tfry&  Thu, 4 May 2017 00:48:29 -0700 \\
+69ffb9d1462616fe647ae042a102dccb2f1a24a9 & heidiaclayton&  Wed, 3 May 2017 22:17:56 -0700 \\
+9e183f9db2c3102c8c291310601c70d96b61b74c & davidteofilovic&  Tue, 2 May 2017 17:12:52 -0700 \\
+b7447b648050b8e3a39c03343052b75603bdc619 & David Teofilovic&  Tue, 2 May 2017 17:12:34 -0700 \\
+3a325695aad758dec884e75fb9ee3bfa3177b0fb & Heidi&  Thu, 27 Apr 2017 11:23:39 -0700 \\
+  \hline  
+\end{tabular}
+
+\section*{Work Log}
+\subsection*{Tanner}
+Spent most of the time working on the sstf, created a first attempt at it Wednesday night. Met with team on Thursday to look over it and make adjustments and figure out how to actually run it. Once we got everything built it was kernel panicking. After that meeting Heidi and I did some more work and refactored to make a functioning copy. I found a testing script that does reading, writing, and piping to test our kernel. To personally approach the problem I did a lot of reading and googling to find good explanations and examples to work with. From there I started reading through how the base noop scheduler worked and how I would need to modify it to make a sstf-look style scheduler. 
+
+\subsection*{Heidi}
+After David committed his first draft of the concurrency, I made a couple of small edits to get rid of the occasional runtime errors. Then, I worked on the scheduler at our group meeting on Thursday and then worked on the SSTF scheduler a lot on Friday. My approach to working on this was basically to look at the linked list documentation and No-op scheduler and find examples of people using kernel linked lists on Google. The code ended up not being very long at all, but the syntax was not what I'm used to so it was a but difficult.
+
+\subsection*{David}
+During the week of May 1st I took it upon myself to do the bulk of the concurrency assignment. Viewing the assignment from the perspective of a team, I figured I would stick to my strengths and try and knock out the assignment in python. I started off by just passing a single lock amongst a few threads and printed out basic statements. Once I solidified the concept in Python, I expanded to five different locks to represent the five forks for the philosophers and worked out the logic with 5 threads. I worked out the assignment on my own, but I ended up with a few bugs which thankfully Heidi sorted out for us! On Thursday of this week, we met up and tried to work through the main assignment. Tanner had some code written for the scheduler which I helped debug. Overall it was a total team effort which led to the completion of the assignment.
+
+\end{document}
