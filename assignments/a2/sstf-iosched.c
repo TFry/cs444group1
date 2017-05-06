@@ -8,11 +8,10 @@
 #include <linux/slab.h>
 #include <linux/init.h>
 
-//Set disk
-int disk_head = -1;
-
 struct sstf_data {
 	struct list_head queue;
+	char direction;
+	sector_t sector;
 };
 
 static void sstf_merged_requests(struct request_queue *q, struct request *rq,
@@ -24,17 +23,64 @@ static void sstf_merged_requests(struct request_queue *q, struct request *rq,
 static int sstf_dispatch(struct request_queue *q, int force)
 {
 	struct sstf_data *nd = q->elevator->elevator_data;
-	char direction;
-
+	
+	// printk("Inside dispatch function.\n");
 	if (!list_empty(&nd->queue)) {
-		struct request *rq;
-		rq = list_entry(nd->queue.next, struct request, queuelist);
-		list_del_init(&rq->queuelist);
-		elv_dispatch_sort(q, rq);
-		//disk_head = blk_rq_pos(rq); //assign position to disk head
+		struct request *rq, *prev, *next;
 
-		// give nd rq's old position
-		nd->sector = rq->__sector;
+		// printk("List not empty.\n");
+		
+		// get previous and next nodes
+		prev = list_entry(nd->queue.prev, struct request, queuelist);
+		next = list_entry(nd->queue.next, struct request, queuelist);
+
+		// just use next if there's only one request
+		rq = next;
+
+		if (prev != next)
+                {
+			// printk("There are more than one request.\n");
+
+			if (nd->direction == 'B')
+			{
+				// printk("Going backward in queue.\n");
+
+				// if prev position is less than nd, dispatch prev
+				if (nd->sector >= blk_rq_pos(prev))
+				{
+					rq = prev;
+				}
+
+				// otherwise, dispatch next
+				else
+				{
+					rq = next;
+					nd->direction = 'F';
+				}
+			}
+			
+			else
+			{
+				// printk("Going forward in queue.\n");
+
+				// if next position is less than nd, dispatch next
+				if (nd->sector >= blk_rq_pos(next))
+				{
+					rq = next;
+				}
+
+				else
+				{
+					rq = prev;
+					nd->direction = 'B';
+				}
+			}
+		}
+
+		list_del_init(&rq->queuelist);
+		elv_dispatch_add_tail(q, rq);
+		nd->sector = blk_rq_sectors(rq) + blk_rq_pos(rq);
+		// printk("Dispatched.\n");
 		return 1;
 	}
 	return 0;
@@ -43,19 +89,37 @@ static int sstf_dispatch(struct request_queue *q, int force)
 static void sstf_add_request(struct request_queue *q, struct request *rq)
 {
 	struct sstf_data *nd = q->elevator->elevator_data;
-        struct list_head *ptr;
+	struct request *prev, *next;
 
-	// iterate over list until position for insertion
-	// is found
-	list_for_each(ptr, &nd->queue) {
-		struct request *cur = list_entry(ptr, struct request, queuelist);
-		if (blk_rq_pos(rq) < blk_rq_pos(cur))
-                {
-			break;
+	// printk("Inside add_request function.\n");
+
+	if (!list_empty(&nd->queue))
+	{
+		// printk("List not empty, insertion sort.\n");
+
+		// get previous and next nodes
+		prev = list_entry(nd->queue.prev, struct request, queuelist);
+		next = list_entry(nd->queue.next, struct request, queuelist);
+
+		// iterating until correct position is found
+		while (blk_rq_pos(next) <= blk_rq_pos(rq))
+		{
+			prev = list_entry(prev->queuelist.prev, struct request, queuelist);
+			next = list_entry(next->queuelist.next, struct request, queuelist);	
 		}
+		
+		// add request to list
+		list_add(&rq->queuelist, &prev->queuelist);
 	}
 
-	list_add_tail(&rq->queuelist, ptr);
+	else
+	{
+		// printk("List is empty, just add.\n");
+
+		list_add(&rq->queuelist, &nd->queue);
+	}
+
+	// printk("Request added.\n");
 }
 
 static struct request *
@@ -93,8 +157,9 @@ static int sstf_init_queue(struct request_queue *q, struct elevator_type *e)
 		return -ENOMEM;
 	}
 
-	// default position of 0
+	// default position of 0, forward
 	nd->sector = 0;
+	nd->direction = 'F';
 	eq->elevator_data = nd;
 
 	INIT_LIST_HEAD(&nd->queue);
@@ -104,7 +169,6 @@ static int sstf_init_queue(struct request_queue *q, struct elevator_type *e)
 	spin_unlock_irq(q->queue_lock);
 	return 0;
 }
-
 
 static void sstf_exit_queue(struct elevator_queue *e)
 {
@@ -130,8 +194,6 @@ static struct elevator_type elevator_sstf = {
 
 static int __init sstf_init(void)
 {
-	//elv_register(&elevator_sstf);
-	//Return elv_register rather than 0
 	return elv_register(&elevator_sstf);
 }
 
@@ -144,6 +206,6 @@ module_init(sstf_init);
 module_exit(sstf_exit);
 
 
-MODULE_AUTHOR("Jens Axboe");
+MODULE_AUTHOR("Group 11-01");
 MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("sstf IO scheduler");
+MODULE_DESCRIPTION("SSTF IO scheduler");
