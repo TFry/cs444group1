@@ -1,30 +1,7 @@
- 3 files changed, 222 insertions(+)
- mode change 100644 => 100755 block/Kconfig.iosched
- mode change 100644 => 100755 block/Makefile
- create mode 100644 block/sstf-iosched.c
-
-diff --git a/../fresh-dir/block/Makefile b/assignments/a2/Makefile
-old mode 100644
-new mode 100755
-index 20645e8..07fff09
---- a/../fresh-dir/block/Makefile
-+++ b/assignments/a2/Makefile
-@@ -16,6 +16,7 @@ obj-$(CONFIG_BLK_DEV_THROTTLING)	+= blk-throttle.o
- obj-$(CONFIG_IOSCHED_NOOP)	+= noop-iosched.o
- obj-$(CONFIG_IOSCHED_DEADLINE)	+= deadline-iosched.o
- obj-$(CONFIG_IOSCHED_CFQ)	+= cfq-iosched.o
-+obj-$(CONFIG_IOSCHED_SSTF) += sstf-iosched.o
- 
- obj-$(CONFIG_BLOCK_COMPAT)	+= compat_ioctl.o
- obj-$(CONFIG_BLK_DEV_INTEGRITY)	+= blk-integrity.o
-
-diff --git a/../fresh-dir/block/Kconfig.iosched b/assignments/a2/Kconfig.iosched
-old mode 100644
-new mode 100755
-index 421bef9..83a2b88
---- a/../fresh-dir/block/Kconfig.iosched
-+++ b/assignments/a2/Kconfig.iosched
-@@ -32,6 +32,12 @@ config IOSCHED_CFQ
+diff -urN original/Kconfig.iosched modified/Kconfig.iosched
+--- original/Kconfig.iosched	2017-05-14 22:16:43.983256000 -0700
++++ modified/Kconfig.iosched	2017-05-05 19:30:42.628157000 -0700
+@@ -32,6 +32,12 @@
  
  	  This is the default I/O scheduler.
  
@@ -37,7 +14,7 @@ index 421bef9..83a2b88
  config CFQ_GROUP_IOSCHED
  	bool "CFQ Group Scheduling support"
  	depends on IOSCHED_CFQ && BLK_CGROUP
-@@ -49,6 +55,9 @@ choice
+@@ -49,6 +55,9 @@
  	config DEFAULT_DEADLINE
  		bool "Deadline" if IOSCHED_DEADLINE=y
  
@@ -47,7 +24,7 @@ index 421bef9..83a2b88
  	config DEFAULT_CFQ
  		bool "CFQ" if IOSCHED_CFQ=y
  
-@@ -62,6 +71,7 @@ config DEFAULT_IOSCHED
+@@ -62,6 +71,7 @@
  	default "deadline" if DEFAULT_DEADLINE
  	default "cfq" if DEFAULT_CFQ
  	default "noop" if DEFAULT_NOOP
@@ -55,11 +32,20 @@ index 421bef9..83a2b88
  
  endmenu
  
-
-diff --git a/../fresh-dir/block/sstf-iosched.c b/assignments/a2/sstf-iosched.c
-index e69de29..70ed036 100644
---- a/../fresh-dir/block/sstf-iosched.c
-+++ b/assignments/a2/sstf-iosched.c
+diff -urN original/Makefile modified/Makefile
+--- original/Makefile	2017-05-05 19:37:06.721575000 -0700
++++ modified/Makefile	2017-05-05 19:30:46.712684000 -0700
+@@ -16,6 +16,7 @@
+ obj-$(CONFIG_IOSCHED_NOOP)	+= noop-iosched.o
+ obj-$(CONFIG_IOSCHED_DEADLINE)	+= deadline-iosched.o
+ obj-$(CONFIG_IOSCHED_CFQ)	+= cfq-iosched.o
++obj-$(CONFIG_IOSCHED_SSTF) += sstf-iosched.o
+ 
+ obj-$(CONFIG_BLOCK_COMPAT)	+= compat_ioctl.o
+ obj-$(CONFIG_BLK_DEV_INTEGRITY)	+= blk-integrity.o
+diff -urN sstf-iosched.c modified/sstf-iosched.c
+--- sstf-iosched.c	        1969-12-31 16:00:00.000000000 -0800
++++ modified/sstf-iosched.c	2017-05-05 18:47:40.368365000 -0700
 @@ -0,0 +1,211 @@
 +/*
 + * elevator sstf
@@ -272,4 +258,3 @@ index e69de29..70ed036 100644
 +MODULE_AUTHOR("Group 11-01");
 +MODULE_LICENSE("GPL");
 +MODULE_DESCRIPTION("SSTF IO scheduler");
- 
