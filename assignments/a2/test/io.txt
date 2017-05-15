@@ -1,0 +1,1038 @@
+Dispatched 2687272.
+Add sector: 4895952
+Dispatched 4897080.
+Dispatched 4896056.
+Dispatched 4895952.
+Add sector: 2687320
+Dispatched 2687320.
+Add sector: 4898008
+Dispatched 4898008.
+Dispatched 4899032.
+Add sector: 2687384
+Dispatched 2687384.
+Add sector: 4900056
+Dispatched 4901080.
+Dispatched 4900056.
+Add sector: 2687432
+Dispatched 2687432.
+Add sector: 4902104
+Dispatched 4902104.
+Dispatched 4903128.
+Add sector: 2687480
+Dispatched 2687480.
+Add sector: 4904152
+Dispatched 4905280.
+Dispatched 4904256.
+Dispatched 4904152.
+Add sector: 2687528
+Dispatched 2687528.
+Add sector: 4906208
+Dispatched 4906208.
+Dispatched 4907232.
+Add sector: 2687592
+Dispatched 2687592.
+Add sector: 4908256
+Dispatched 4909280.
+Dispatched 4908256.
+Add sector: 2687640
+Dispatched 2687640.
+Add sector: 4910304
+Dispatched 4910304.
+Dispatched 4911328.
+Add sector: 2687688
+Dispatched 2687688.
+Add sector: 4912352
+Dispatched 4913480.
+Dispatched 4912456.
+Dispatched 4912352.
+Add sector: 2687736
+Dispatched 2687736.
+Add sector: 4914408
+Dispatched 4914408.
+Dispatched 4916288.
+Dispatched 4915264.
+Add sector: 2687800
+Dispatched 2687800.
+Add sector: 4916520
+Dispatched 4916520.
+Dispatched 4917544.
+Add sector: 2687848
+Dispatched 2687848.
+Add sector: 4918568
+Dispatched 4919592.
+Dispatched 4918568.
+Add sector: 2687896
+Dispatched 2687896.
+Add sector: 4920616
+Dispatched 4920616.
+Dispatched 4921744.
+Dispatched 4920720.
+Add sector: 2687944
+Dispatched 2687944.
+Add sector: 4922672
+Dispatched 4922672.
+Dispatched 4923696.
+Add sector: 2688008
+Dispatched 2688008.
+Add sector: 4924720
+Dispatched 4925744.
+Dispatched 4924720.
+Add sector: 2688056
+Dispatched 2688056.
+Add sector: 4926768
+Dispatched 4926768.
+Dispatched 4927792.
+Add sector: 2688104
+Dispatched 2688104.
+Add sector: 4928816
+Dispatched 4929944.
+Dispatched 4928920.
+Dispatched 4928816.
+Add sector: 2688152
+Dispatched 2688152.
+Add sector: 4930872
+Dispatched 4930872.
+Dispatched 4931896.
+Add sector: 2688216
+Dispatched 2688216.
+Add sector: 4932920
+Dispatched 4933944.
+Dispatched 4932920.
+Add sector: 2688264
+Dispatched 2688264.
+Add sector: 4934968
+Dispatched 4934968.
+Dispatched 4935992.
+Add sector: 2688312
+Dispatched 2688312.
+Add sector: 4937016
+Dispatched 4938144.
+Dispatched 4937120.
+Dispatched 4937016.
+Add sector: 2688360
+Dispatched 2688360.
+Add sector: 4939072
+Dispatched 4939072.
+Dispatched 4940096.
+Add sector: 2688424
+Dispatched 2688424.
+Add sector: 4941120
+Dispatched 4942144.
+Dispatched 4941120.
+Add sector: 2688472
+Dispatched 2688472.
+Add sector: 4943168
+Dispatched 4943168.
+Dispatched 4944192.
+Add sector: 2688520
+Dispatched 2688520.
+Add sector: 4945216
+Dispatched 4946344.
+Dispatched 4945320.
+Dispatched 4945216.
+Add sector: 2688568
+Dispatched 2688568.
+Add sector: 4947272
+Dispatched 4947272.
+Dispatched 4949056.
+Dispatched 4948032.
+Add sector: 2688632
+Dispatched 2688632.
+Add sector: 4949384
+Dispatched 4949384.
+Dispatched 4950408.
+Add sector: 2688680
+Dispatched 2688680.
+Add sector: 4951432
+Dispatched 4952456.
+Dispatched 4951432.
+Add sector: 2688728
+Dispatched 2688728.
+Add sector: 4953480
+Dispatched 4953480.
+Dispatched 4954608.
+Dispatched 4953584.
+Add sector: 2688776
+Dispatched 2688776.
+Add sector: 4955536
+Dispatched 4955536.
+Dispatched 4956560.
+Add sector: 2688840
+Dispatched 2688840.
+Add sector: 4957584
+Dispatched 4958608.
+Dispatched 4957584.
+Add sector: 2688888
+Dispatched 2688888.
+Add sector: 4959632
+Dispatched 4959632.
+Dispatched 4960656.
+Add sector: 2688936
+Dispatched 2688936.
+Add sector: 4961680
+Dispatched 4962808.
+Dispatched 4961784.
+Dispatched 4961680.
+Add sector: 2688984
+Dispatched 2688984.
+Add sector: 4963736
+Dispatched 4963736.
+Dispatched 4965440.
+Dispatched 4964416.
+Add sector: 2689048
+Dispatched 2689048.
+Add sector: 4965848
+Dispatched 4965848.
+Dispatched 4966872.
+Add sector: 2689096
+Dispatched 2689096.
+Add sector: 4967896
+Dispatched 4968920.
+Dispatched 4967896.
+Add sector: 2689144
+Dispatched 2689144.
+Add sector: 4969944
+Dispatched 4969944.
+Dispatched 4971072.
+Dispatched 4970048.
+Add sector: 2689192
+Dispatched 2689192.
+Add sector: 4972000
+Dispatched 4972000.
+Dispatched 4973024.
+Add sector: 2689256
+Dispatched 2689256.
+Add sector: 4974048
+Dispatched 4975072.
+Dispatched 4974048.
+Add sector: 2689304
+Dispatched 2689304.
+Add sector: 4976096
+Dispatched 4976096.
+Dispatched 4977120.
+Add sector: 2689352
+Dispatched 2689352.
+Add sector: 4978144
+Dispatched 4979272.
+Dispatched 4978248.
+Dispatched 4978144.
+Add sector: 2689400
+Dispatched 2689400.
+Add sector: 4980200
+Dispatched 4980200.
+Dispatched 4998208.
+Dispatched 4997184.
+Dispatched 4996728.
+Add sector: 2689464
+Dispatched 2689464.
+Add sector: 4998304
+Dispatched 4998304.
+Dispatched 4999328.
+Add sector: 2689520
+Dispatched 2689520.
+Add sector: 5000352
+Dispatched 5001376.
+Dispatched 5000352.
+Add sector: 2689568
+Dispatched 2689568.
+Add sector: 5002400
+Dispatched 5002400.
+Dispatched 5003528.
+Dispatched 5002504.
+Add sector: 2689616
+Dispatched 2689616.
+Add sector: 5004456
+Dispatched 5004456.
+Dispatched 5005480.
+Add sector: 2689680
+Dispatched 2689680.
+Add sector: 5006504
+Dispatched 5007528.
+Dispatched 5006504.
+Add sector: 2689728
+Dispatched 2689728.
+Add sector: 5008552
+Dispatched 5008552.
+Dispatched 5009576.
+Add sector: 2689776
+Dispatched 2689776.
+Add sector: 5010600
+Dispatched 5011728.
+Dispatched 5010704.
+Dispatched 5010600.
+Add sector: 2689824
+Dispatched 2689824.
+Add sector: 5012656
+Dispatched 5012656.
+Dispatched 5013680.
+Add sector: 2689888
+Dispatched 2689888.
+Add sector: 5014704
+Dispatched 5015728.
+Dispatched 5014704.
+Add sector: 2689936
+Dispatched 2689936.
+Add sector: 5016752
+Dispatched 5016752.
+Dispatched 5017776.
+Add sector: 2689984
+Dispatched 2689984.
+Add sector: 5018800
+Dispatched 5019928.
+Dispatched 5018904.
+Dispatched 5018800.
+Add sector: 2690032
+Dispatched 2690032.
+Add sector: 5020856
+Dispatched 5020856.
+Dispatched 5021880.
+Add sector: 2690096
+Dispatched 2690096.
+Add sector: 5022904
+Dispatched 5023928.
+Dispatched 5022904.
+Add sector: 2690144
+Dispatched 2690144.
+Add sector: 5024952
+Dispatched 5024952.
+Dispatched 5025976.
+Add sector: 2690192
+Dispatched 2690192.
+Add sector: 5027000
+Dispatched 5028128.
+Dispatched 5027104.
+Dispatched 5027000.
+Add sector: 2690240
+Dispatched 2690240.
+Add sector: 5029056
+Dispatched 5029056.
+Dispatched 5030080.
+Add sector: 2690304
+Dispatched 2690304.
+Add sector: 5031104
+Dispatched 5032128.
+Dispatched 5031104.
+Add sector: 2690352
+Dispatched 2690352.
+Add sector: 5033152
+Dispatched 5033152.
+Dispatched 5034176.
+Add sector: 2690400
+Dispatched 2690400.
+Add sector: 5035200
+Dispatched 5036328.
+Dispatched 5035304.
+Dispatched 5035200.
+Add sector: 2690448
+Dispatched 2690448.
+Add sector: 5037256
+Dispatched 5037256.
+Dispatched 5038280.
+Add sector: 2690512
+Dispatched 2690512.
+Add sector: 5039304
+Dispatched 5040328.
+Dispatched 5039304.
+Add sector: 2690560
+Dispatched 2690560.
+Add sector: 5041352
+Dispatched 5041352.
+Dispatched 5042376.
+Add sector: 2690608
+Dispatched 2690608.
+Add sector: 5043400
+Dispatched 5044528.
+Dispatched 5043504.
+Dispatched 5043400.
+Add sector: 2690656
+Dispatched 2690656.
+Add sector: 5045456
+Dispatched 5045456.
+Dispatched 5046480.
+Add sector: 2690720
+Dispatched 2690720.
+Add sector: 5047504
+Dispatched 5048528.
+Dispatched 5047504.
+Add sector: 2690768
+Dispatched 2690768.
+Add sector: 5049552
+Dispatched 5049552.
+Dispatched 5050576.
+Add sector: 2690816
+Dispatched 2690816.
+Add sector: 5051600
+Dispatched 5052728.
+Dispatched 5051704.
+Dispatched 5051600.
+Add sector: 2690864
+Dispatched 2690864.
+Add sector: 5053656
+Dispatched 5053656.
+Dispatched 5054680.
+Add sector: 2690928
+Dispatched 2690928.
+Add sector: 5055704
+Dispatched 5056728.
+Dispatched 5055704.
+Add sector: 2690976
+Dispatched 2690976.
+Add sector: 5057752
+Dispatched 5057752.
+Dispatched 5058776.
+Add sector: 2691024
+Dispatched 2691024.
+Add sector: 5059800
+Dispatched 5060928.
+Dispatched 5059904.
+Dispatched 5059800.
+Add sector: 2691072
+Dispatched 2691072.
+Add sector: 5061856
+Dispatched 5061856.
+Dispatched 5062880.
+Add sector: 2691136
+Dispatched 2691136.
+Add sector: 5063904
+Dispatched 5064928.
+Dispatched 5063904.
+Add sector: 2691184
+Dispatched 2691184.
+Add sector: 5065952
+Dispatched 5065952.
+Dispatched 5066976.
+Add sector: 2691232
+Dispatched 2691232.
+Add sector: 5068000
+Dispatched 5069128.
+Dispatched 5068104.
+Dispatched 5068000.
+Add sector: 2691280
+Dispatched 2691280.
+Add sector: 5070056
+Dispatched 5070056.
+Dispatched 5071080.
+Add sector: 2691344
+Dispatched 2691344.
+Add sector: 5072104
+Dispatched 5073128.
+Dispatched 5072104.
+Add sector: 2691392
+Dispatched 2691392.
+Add sector: 5074152
+Dispatched 5074152.
+Dispatched 5075176.
+Add sector: 2691440
+Dispatched 2691440.
+Add sector: 5076200
+Dispatched 5077328.
+Dispatched 5076304.
+Dispatched 5076200.
+Add sector: 2691488
+Dispatched 2691488.
+Add sector: 5078256
+Dispatched 5078256.
+Dispatched 5079280.
+Add sector: 2691552
+Dispatched 2691552.
+Add sector: 5080304
+Dispatched 5081328.
+Dispatched 5080304.
+Add sector: 2691600
+Dispatched 2691600.
+Add sector: 5082352
+Dispatched 5082352.
+Dispatched 5083376.
+Add sector: 2691648
+Dispatched 2691648.
+Add sector: 5084400
+Dispatched 5085528.
+Dispatched 5084504.
+Dispatched 5084400.
+Add sector: 2691696
+Dispatched 2691696.
+Add sector: 5086456
+Dispatched 5086456.
+Dispatched 5087480.
+Add sector: 2691760
+Dispatched 2691760.
+Add sector: 5088504
+Dispatched 5089528.
+Dispatched 5088504.
+Add sector: 2691808
+Dispatched 2691808.
+Add sector: 5090552
+Dispatched 5090552.
+Dispatched 5091576.
+Add sector: 2691856
+Dispatched 2691856.
+Add sector: 5092600
+Dispatched 5093728.
+Dispatched 5092704.
+Dispatched 5092600.
+Add sector: 2691904
+Dispatched 2691904.
+Add sector: 5094656
+Dispatched 5094656.
+Dispatched 5095680.
+Add sector: 2691968
+Dispatched 2691968.
+Add sector: 5096704
+Dispatched 5097728.
+Dispatched 5096704.
+Add sector: 2692016
+Dispatched 2692016.
+Add sector: 5098752
+Dispatched 5098752.
+Dispatched 5099776.
+Add sector: 2692064
+Dispatched 2692064.
+Add sector: 5100800
+Dispatched 5101928.
+Dispatched 5100904.
+Dispatched 5100800.
+Add sector: 2692112
+Dispatched 2692112.
+Add sector: 5102856
+Dispatched 5102856.
+Dispatched 5103880.
+Add sector: 2692176
+Dispatched 2692176.
+Add sector: 5104904
+Dispatched 5105928.
+Dispatched 5104904.
+Add sector: 2692224
+Dispatched 2692224.
+Add sector: 5106952
+Dispatched 5106952.
+Dispatched 5107976.
+Add sector: 2692272
+Dispatched 2692272.
+Add sector: 5109000
+Dispatched 5110128.
+Dispatched 5109104.
+Dispatched 5109000.
+Add sector: 2692320
+Dispatched 2692320.
+Add sector: 5111056
+Dispatched 5111056.
+Dispatched 5112080.
+Add sector: 2692384
+Dispatched 2692384.
+Add sector: 5113104
+Dispatched 5114128.
+Dispatched 5113104.
+Add sector: 2692432
+Dispatched 2692432.
+Add sector: 5115152
+Dispatched 5115152.
+Dispatched 5116176.
+Add sector: 2692480
+Dispatched 2692480.
+Add sector: 5117200
+Dispatched 5118328.
+Dispatched 5117304.
+Dispatched 5117200.
+Add sector: 2692528
+Dispatched 2692528.
+Add sector: 5119256
+Dispatched 5119256.
+Dispatched 5120280.
+Add sector: 2692592
+Dispatched 2692592.
+Add sector: 5121304
+Dispatched 5122328.
+Dispatched 5121304.
+Add sector: 2692640
+Dispatched 2692640.
+Add sector: 5123352
+Dispatched 5123352.
+Dispatched 5124376.
+Add sector: 2692688
+Dispatched 2692688.
+Add sector: 5125400
+Dispatched 5126528.
+Dispatched 5125504.
+Dispatched 5125400.
+Add sector: 2692736
+Dispatched 2692736.
+Add sector: 5127456
+Dispatched 5127456.
+Dispatched 5128480.
+Add sector: 2692800
+Dispatched 2692800.
+Add sector: 5129504
+Dispatched 5130528.
+Dispatched 5129504.
+Add sector: 2692848
+Dispatched 2692848.
+Add sector: 5131552
+Dispatched 5131552.
+Dispatched 5132576.
+Add sector: 2692896
+Dispatched 2692896.
+Add sector: 5133600
+Dispatched 5134728.
+Dispatched 5133704.
+Dispatched 5133600.
+Add sector: 2692944
+Dispatched 2692944.
+Add sector: 5135656
+Dispatched 5135656.
+Dispatched 5136680.
+Add sector: 2693008
+Dispatched 2693008.
+Add sector: 5137704
+Dispatched 5138728.
+Dispatched 5137704.
+Add sector: 2693056
+Dispatched 2693056.
+Add sector: 5139752
+Dispatched 5139752.
+Dispatched 5140776.
+Add sector: 2693104
+Dispatched 2693104.
+Add sector: 5141800
+Dispatched 5142928.
+Dispatched 5141904.
+Dispatched 5141800.
+Add sector: 2693152
+Dispatched 2693152.
+Add sector: 5143856
+Dispatched 5143856.
+Dispatched 5144880.
+Add sector: 2693216
+Dispatched 2693216.
+Add sector: 5145904
+Dispatched 5146928.
+Dispatched 5145904.
+Add sector: 2693264
+Dispatched 2693264.
+Add sector: 5147952
+Dispatched 5147952.
+Dispatched 5148976.
+Add sector: 2693312
+Dispatched 2693312.
+Add sector: 5150000
+Dispatched 5151128.
+Dispatched 5150104.
+Dispatched 5150000.
+Add sector: 2693360
+Dispatched 2693360.
+Add sector: 5152056
+Dispatched 5152056.
+Dispatched 5153080.
+Add sector: 2693424
+Dispatched 2693424.
+Add sector: 5154104
+Dispatched 5155128.
+Dispatched 5154104.
+Add sector: 2693472
+Dispatched 2693472.
+Add sector: 5156152
+Dispatched 5156152.
+Dispatched 5157176.
+Add sector: 2693520
+Dispatched 2693520.
+Add sector: 5158200
+Dispatched 5159328.
+Dispatched 5158304.
+Dispatched 5158200.
+Add sector: 2693568
+Dispatched 2693568.
+Add sector: 5160256
+Dispatched 5160256.
+Dispatched 5161280.
+Add sector: 2693632
+Dispatched 2693632.
+Add sector: 5162304
+Dispatched 5163328.
+Dispatched 5162304.
+Add sector: 2693680
+Dispatched 2693680.
+Add sector: 5164352
+Dispatched 5164352.
+Dispatched 5165376.
+Add sector: 2693728
+Dispatched 2693728.
+Add sector: 5166400
+Dispatched 5167528.
+Dispatched 5166504.
+Dispatched 5166400.
+Add sector: 2693776
+Dispatched 2693776.
+Add sector: 5168456
+Dispatched 5168456.
+Dispatched 5169480.
+Add sector: 2693840
+Dispatched 2693840.
+Add sector: 5170504
+Dispatched 5171528.
+Dispatched 5170504.
+Add sector: 2693888
+Dispatched 2693888.
+Add sector: 5172552
+Dispatched 5172552.
+Dispatched 5173576.
+Add sector: 2693936
+Dispatched 2693936.
+Add sector: 5174600
+Dispatched 5175728.
+Dispatched 5174704.
+Dispatched 5174600.
+Add sector: 2693984
+Dispatched 2693984.
+Add sector: 5176656
+Dispatched 5176656.
+Dispatched 5177680.
+Add sector: 2694048
+Dispatched 2694048.
+Add sector: 5178704
+Dispatched 5179728.
+Dispatched 5178704.
+Add sector: 2694096
+Dispatched 2694096.
+Add sector: 5180752
+Dispatched 5180752.
+Dispatched 5181776.
+Add sector: 2694144
+Dispatched 2694144.
+Add sector: 5182800
+Dispatched 5183928.
+Dispatched 5182904.
+Dispatched 5182800.
+Add sector: 2694192
+Dispatched 2694192.
+Add sector: 5184856
+Dispatched 5184856.
+Dispatched 5185880.
+Add sector: 2694256
+Dispatched 2694256.
+Add sector: 5186904
+Dispatched 5187928.
+Dispatched 5186904.
+Add sector: 2694304
+Dispatched 2694304.
+Add sector: 5188952
+Dispatched 5188952.
+Dispatched 5189976.
+Add sector: 2694352
+Dispatched 2694352.
+Add sector: 5191000
+Dispatched 5192128.
+Dispatched 5191104.
+Dispatched 5191000.
+Add sector: 2694400
+Dispatched 2694400.
+Add sector: 5193056
+Dispatched 5193056.
+Dispatched 5194080.
+Add sector: 2694464
+Dispatched 2694464.
+Add sector: 5195104
+Dispatched 5196128.
+Dispatched 5195104.
+Add sector: 2694512
+Dispatched 2694512.
+Add sector: 5197152
+Dispatched 5197152.
+Dispatched 5198176.
+Add sector: 2694560
+Dispatched 2694560.
+Add sector: 5199200
+Dispatched 5200328.
+Dispatched 5199304.
+Dispatched 5199200.
+Add sector: 2694608
+Dispatched 2694608.
+Add sector: 5201256
+Dispatched 5201256.
+Dispatched 5202280.
+Add sector: 2694696
+Dispatched 2694696.
+Add sector: 2694672
+Dispatched 2694672.
+Dispatched 2694704.
+Add sector: 5203304
+Dispatched 5204328.
+Dispatched 5203304.
+Add sector: 2694728
+Dispatched 2694728.
+Add sector: 5205352
+Dispatched 5205352.
+Dispatched 5206376.
+Add sector: 2694776
+Dispatched 2694776.
+Add sector: 5207400
+Dispatched 5208528.
+Dispatched 5207504.
+Dispatched 5207400.
+Add sector: 2694824
+Dispatched 2694824.
+Add sector: 5209456
+Dispatched 5209456.
+Dispatched 5210480.
+Add sector: 2694888
+Dispatched 2694888.
+Add sector: 5211504
+Dispatched 5212528.
+Dispatched 5211504.
+Add sector: 2694936
+Dispatched 2694936.
+Add sector: 5213552
+Dispatched 5213552.
+Dispatched 5214576.
+Add sector: 2694984
+Dispatched 2694984.
+Add sector: 5215600
+Dispatched 5216728.
+Dispatched 5215704.
+Dispatched 5215600.
+Add sector: 2695032
+Dispatched 2695032.
+Add sector: 5217656
+Dispatched 5217656.
+Dispatched 5218680.
+Add sector: 2695096
+Dispatched 2695096.
+Add sector: 5219704
+Dispatched 5220728.
+Dispatched 5219704.
+Add sector: 2695144
+Dispatched 2695144.
+Add sector: 5221752
+Dispatched 5221752.
+Dispatched 5222776.
+Add sector: 2695192
+Dispatched 2695192.
+Add sector: 5223800
+Dispatched 5224928.
+Dispatched 5223904.
+Dispatched 5223800.
+Add sector: 2695240
+Dispatched 2695240.
+Add sector: 5225856
+Dispatched 5225856.
+Dispatched 5227536.
+Dispatched 5226512.
+Add sector: 2695304
+Dispatched 2695304.
+Add sector: 5227912
+Dispatched 5227912.
+Dispatched 5228936.
+Add sector: 2695352
+Dispatched 2695352.
+Add sector: 5229960
+Dispatched 5230984.
+Dispatched 5229960.
+Add sector: 2695400
+Dispatched 2695400.
+Add sector: 5232008
+Dispatched 5232008.
+Dispatched 5233136.
+Dispatched 5232112.
+Add sector: 2695448
+Dispatched 2695448.
+Add sector: 5234064
+Dispatched 5234064.
+Dispatched 5235088.
+Add sector: 2695512
+Dispatched 2695512.
+Add sector: 5236112
+Dispatched 5237136.
+Dispatched 5236112.
+Add sector: 2695560
+Dispatched 2695560.
+Add sector: 5238160
+Dispatched 5238160.
+Dispatched 5239184.
+Add sector: 2695608
+Dispatched 2695608.
+Add sector: 5240208
+Dispatched 5241336.
+Dispatched 5240312.
+Dispatched 5240208.
+Add sector: 2695656
+Dispatched 2695656.
+Add sector: 5242264
+Dispatched 5242264.
+Dispatched 5260000.
+Dispatched 5258976.
+Add sector: 2695720
+Dispatched 2695720.
+Add sector: 5260408
+Dispatched 5260408.
+Dispatched 5261432.
+Add sector: 2695776
+Dispatched 2695776.
+Add sector: 5262456
+Dispatched 5263480.
+Dispatched 5262456.
+Add sector: 2695824
+Dispatched 2695824.
+Add sector: 5264504
+Dispatched 5264504.
+Dispatched 5265632.
+Dispatched 5264608.
+Add sector: 2695872
+Dispatched 2695872.
+Add sector: 5266560
+Dispatched 5266560.
+Dispatched 5267584.
+Add sector: 2695936
+Dispatched 2695936.
+Add sector: 5268608
+Dispatched 5269632.
+Dispatched 5268608.
+Add sector: 2695984
+Dispatched 2695984.
+Add sector: 5270656
+Dispatched 5270656.
+Dispatched 5271680.
+Add sector: 2696032
+Dispatched 2696032.
+Add sector: 5272704
+Dispatched 5273832.
+Dispatched 5272808.
+Dispatched 5272704.
+Add sector: 2696080
+Dispatched 2696080.
+Add sector: 5274760
+Dispatched 5274760.
+Dispatched 5275784.
+Add sector: 2696144
+Dispatched 2696144.
+Add sector: 5276808
+Dispatched 5277832.
+Dispatched 5276808.
+Add sector: 2696192
+Dispatched 2696192.
+Add sector: 5278856
+Dispatched 5278856.
+Dispatched 5279880.
+Add sector: 2696240
+Dispatched 2696240.
+Add sector: 5280904
+Dispatched 5282032.
+Dispatched 5281008.
+Dispatched 5280904.
+Add sector: 2696288
+Dispatched 2696288.
+Add sector: 5282960
+Dispatched 5282960.
+Dispatched 5283984.
+Add sector: 2696352
+Dispatched 2696352.
+Add sector: 5285008
+Dispatched 5286032.
+Dispatched 5285008.
+Add sector: 2696400
+Dispatched 2696400.
+Add sector: 5287056
+Dispatched 5287056.
+Dispatched 5288080.
+Add sector: 2696448
+Dispatched 2696448.
+Add sector: 5289104
+Dispatched 5290232.
+Dispatched 5289208.
+Dispatched 5289104.
+Add sector: 2696496
+Dispatched 2696496.
+Add sector: 5291160
+Dispatched 5291160.
+Dispatched 5292184.
+Add sector: 2696560
+Dispatched 2696560.
+Add sector: 5293208
+Dispatched 5294232.
+Dispatched 5293208.
+Add sector: 2696608
+Dispatched 2696608.
+Add sector: 5295256
+Dispatched 5295256.
+Dispatched 5296280.
+Add sector: 2696656
+Dispatched 2696656.
+Add sector: 5297304
+Dispatched 5298432.
+Dispatched 5297408.
+Dispatched 5297304.
+Add sector: 2696704
+Dispatched 2696704.
+Add sector: 5299360
+Dispatched 5299360.
+Dispatched 5300384.
+Add sector: 2696768
+Dispatched 2696768.
+Add sector: 5301408
+Dispatched 5302432.
+Dispatched 5301408.
+Add sector: 2696816
+Dispatched 2696816.
+Add sector: 5303456
+Dispatched 5303456.
+Dispatched 5304480.
+Add sector: 2696864
+Dispatched 2696864.
+Add sector: 5305504
+Dispatched 5306632.
+Dispatched 5305608.
+Dispatched 5305504.
+Add sector: 2696912
+Dispatched 2696912.
+Add sector: 5307560
+Dispatched 5307560.
+Dispatched 5308584.
+Add sector: 2696976
+Dispatched 2696976.
+Add sector: 5309608
+Dispatched 5310632.
+Dispatched 5309608.
+Add sector: 2697024
+Dispatched 2697024.
+Add sector: 5311656
+Dispatched 5311656.
+Dispatched 5312680.
+Add sector: 2697072
+Dispatched 2697072.
+Add sector: 5313704
+Dispatched 5314832.
+Dispatched 5313808.
+Dispatched 5313704.
+Add sector: 2697120
+Dispatched 2697120.
+Add sector: 5315760
+Dispatched 5315760.
+Dispatched 5316784.
+Add sector: 2697184
+Dispatched 2697184.
+Add sector: 5317808
+Dispatched 5318832.
+Dispatched 5317808.
+Add sector: 2697232
+Dispatched 2697232.
+Add sector: 5319856
+Dispatched 5319856.
+Dispatched 5320880.
+Add sector: 2697280
+Dispatched 2697280.
+Add sector: 5321904
+Dispatched 5323032.
+Dispatched 5322008.
+Dispatched 5321904.
+Add sector: 2697328
+Dispatched 2697328.
+Add sector: 5323960
+Dispatched 5323960.
+Dispatched 5324984.
+Add sector: 2697392
+Dispatched 2697392.
+Add sector: 5326008
+Dispatched 5327032.
+Dispatched 5326008.
+Add sector: 2697440
+Dispatched 2697440.
+Add sector: 5328056
+Dispatched 5328056.
+Dispatched 5329080.
