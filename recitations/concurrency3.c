@@ -191,46 +191,51 @@ void initialize(list_t *lst)
 
 int main()
 {
-   int i;
+   int i, thread_num = 0;
    pthread_t searchers[2], deleters[2], inserters[2];
-   param_t params;
+   param_t params1, params2, params3, params4, params5, params6;
 
    initialize(&list);
 
-   for (i = 0; i < 2; i++)
-   {
-      params.thread_num = i + 5;
-      pthread_create(&inserters[i], NULL, inserter, &params);
-   }
+   thread_num++;
+   params1.thread_num = thread_num;
+   pthread_create(&inserters[0], NULL, inserter, &params1);
+
+   thread_num++;
+   params2.thread_num = thread_num;
+   pthread_create(&inserters[1], NULL, inserter, &params2);
+
+
+   thread_num++;
+   params3.thread_num = thread_num;
+   pthread_create(&searchers[0], NULL, searcher, &params3);
+
+   thread_num++;
+   params4.thread_num = thread_num;
+   pthread_create(&searchers[1], NULL, searcher, &params4);
+
+
+   thread_num++;
+   params5.thread_num = thread_num; 
+   pthread_create(&deleters[0], NULL, deleter, &params5);
+
+   thread_num++;
+   params6.thread_num = thread_num; 
+   pthread_create(&deleters[1], NULL, deleter, &params6);
+
 
    for (i = 0; i < 2; i++)
    {
-      params.thread_num = i + 1;
-      pthread_create(&searchers[i], NULL, searcher, &params);
-   }
-
-   for (i = 0; i < 2; i++)
-   {
-      params.thread_num = i + 3;
-      pthread_create(&deleters[i], NULL, deleter, &params);
-   }
-
-
-   for (i = 0; i < 2; i++)
-   {
-      params.thread_num = i + 1;
       pthread_join(searchers[i], NULL);
    }
 
    for (i = 0; i < 2; i++)
    {
-      params.thread_num = i + 1;
       pthread_join(deleters[i], NULL);
    }
 
    for (i = 0; i < 2; i++)
    {
-      params.thread_num = i + 1;
       pthread_join(inserters[i], NULL);
    }
 
