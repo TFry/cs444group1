@@ -79,6 +79,7 @@ void remov(list_t *lst, int i)
    if (found == 1)
    {
       printf("[Thread %d] Deleting value: %d\n", i, val);
+      print_list(lst);
    }
 
    sem_post(&(lst->no_searcher));
