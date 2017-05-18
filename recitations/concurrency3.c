@@ -13,8 +13,7 @@ struct node {
 
 typedef struct {
    struct node *head, *tail;
-   sem_t sem;
-   pthread_mutex_t ins, del;
+   sem_t no_searcher, no_inserter, inserter;
 } list_t;
 
 typedef struct {
@@ -28,6 +27,18 @@ int random_gen()
 
 list_t list;
 
+void print_list(list_t *lst) {
+      struct node *cur;
+
+      cur = lst->head;
+
+      while(cur != NULL) {
+            printf("[%d] ", cur->data);
+            cur = cur->next;
+      }
+      printf("\n");
+}
+
 
 void remov(list_t *lst, int i)
 {
@@ -36,28 +47,19 @@ void remov(list_t *lst, int i)
    struct node *prev, *cur, *tmp;
    
    prev = cur = lst->head;
-
-   for (j = 0; j < 4; j++)
-   {
-      sem_wait(&(lst->sem));
-   }
-
-
-   pthread_mutex_lock(&(lst->ins));
-   pthread_mutex_lock(&(lst->del));
-
+   
+   sem_wait(&(lst->no_searcher));
+   sem_wait(&(lst->no_inserter));
    if (lst->head != NULL && lst->head->data == val)
    {
       found = 1;
       tmp = lst->head->next;
       free(lst->head);
       lst->head = tmp;
-   }
-
-   else
-   {
+   } else {
       while (cur != NULL)
       {
+      //    printf("%d %d\n", cur->data, val);
          if (cur->data == val)
          {
             found = 1;
@@ -72,19 +74,15 @@ void remov(list_t *lst, int i)
          prev = cur;
          cur = cur->next;
       }
-      
-      if (found == 1)
-      {
-         printf("[Thread %d] Deleting value: %d\n", i, val);
-      }
    }
 
-   pthread_mutex_unlock(&(lst->ins));
-   pthread_mutex_unlock(&(lst->del));
-   for (j = 0; j < 4; j++)
+   if (found == 1)
    {
-      sem_post(&(lst->sem));
-   } 
+      printf("[Thread %d] Deleting value: %d\n", i, val);
+   }
+
+   sem_post(&(lst->no_searcher));
+   sem_post(&(lst->no_inserter));
 
 }
 
@@ -92,7 +90,7 @@ void find(list_t *lst, int i)
 {
    struct node *tmp = lst->head;
    int val = random_gen();
-   sem_wait(&(lst->sem));
+   sem_wait(&(lst->no_searcher));
    printf("[Thread %d] Searching for value: %d\n", i, val);
    while (tmp != NULL)
    {
@@ -104,41 +102,37 @@ void find(list_t *lst, int i)
          
       tmp = tmp->next;
    }
-   sem_post(&(lst->sem));
+   sem_post(&(lst->no_searcher));
 }
 
 void create(list_t *lst, int i)
 {
       struct node *new_node = malloc(sizeof(struct node));;
       int val = random_gen();
+      struct node *cur;
       
       new_node->next = NULL;
       new_node->data = val;
       
-      sem_wait(&(lst->sem));
-      pthread_mutex_lock(&(lst->ins));
+      sem_wait(&(lst->no_inserter));
+      sem_wait(&(lst->inserter));
 
-
-      if (lst->head == lst->tail)
+      if (lst->head == NULL)
       { 
          lst->head = new_node;
+      } else {
+         cur = lst->head;
+         while(cur->next != NULL) {
+            cur = cur->next;
+         }
+         cur->next = new_node;
       }
 
-      if (lst->tail != NULL)
-      {
-         lst->tail->next = new_node;
-         lst->tail = new_node;
-      }
-
-      if (lst->tail == NULL)
-      {
-         lst->tail = new_node;
-      }
 
       printf("[Thread %d] Inserting value: %d\n", i, val);
-
-      pthread_mutex_unlock(&(lst->ins));
-      sem_post(&(lst->sem));
+      print_list(lst);
+      sem_post(&(lst->inserter));
+      sem_post(&(lst->no_inserter));
 }
 
 void *searcher(void *params)
@@ -158,7 +152,6 @@ void *deleter(void *params)
 {
    param_t *args = params;
    int i = args->thread_num;
-
    while(1)
    {    
       remov(&list, i);
@@ -186,16 +179,13 @@ void *inserter(void *params)
 
 void initialize(list_t *lst)
 {
-   pthread_mutex_t x = PTHREAD_MUTEX_INITIALIZER;
    srand(time(NULL));
    lst->head = NULL;
    lst->tail = NULL;
    
-   pthread_mutex_init(&(lst->ins), NULL);
-
-   pthread_mutex_init(&(lst->del), NULL);
-   
-   sem_init(&(lst->sem), 0, 4);
+   sem_init(&(lst->no_searcher), 0, 1);
+   sem_init(&(lst->no_inserter), 0, 1);
+   sem_init(&(lst->inserter), 0, 1);
 }
 
 int main()
@@ -208,21 +198,22 @@ int main()
 
    for (i = 0; i < 2; i++)
    {
+      params.thread_num = i + 5;
+      pthread_create(&inserters[i], NULL, inserter, &params);
+   }
+
+   for (i = 0; i < 2; i++)
+   {
       params.thread_num = i + 1;
       pthread_create(&searchers[i], NULL, searcher, &params);
    }
 
    for (i = 0; i < 2; i++)
    {
-      params.thread_num = i + 1;
+      params.thread_num = i + 3;
       pthread_create(&deleters[i], NULL, deleter, &params);
    }
 
-   for (i = 0; i < 2; i++)
-   {
-      params.thread_num = i + 1;
-      pthread_create(&inserters[i], NULL, inserter, &params);
-   }
 
    for (i = 0; i < 2; i++)
    {
