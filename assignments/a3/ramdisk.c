@@ -8,7 +8,7 @@
 #include <linux/module.h>
 #include <linux/moduleparam.h>
 #include <linux/init.h>
-
+#include <linux/crypto.h>
 #include <linux/kernel.h> /* printk() */
 #include <linux/fs.h>     /* everything... */
 #include <linux/errno.h>  /* error codes */
