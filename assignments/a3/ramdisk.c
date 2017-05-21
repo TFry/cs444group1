@@ -125,9 +125,7 @@ static struct block_device_operations sbd_ops = {
 };
 
 static int __init sbd_init(void) {
-	/*
-	 * Set up our internal device.
-	 */
+	unsigned int val;
 	Device.size = nsectors * logical_block_size;
 	spin_lock_init(&Device.lock);
 	Device.data = vmalloc(Device.size);
@@ -140,8 +138,17 @@ static int __init sbd_init(void) {
 	blk_queue_logical_block_size(Queue, logical_block_size);
 
         Device.cipher = crypto_alloc_cipher("aes", 4, CRYPTO_ALG_ASYNC);
-	crypto_cipher_setkey(Device.cipher, crypto_key, KEY_SIZE);
 
+	if (IS_ERR(Device.blkcipher)) 
+        {
+        printk("FAIL POINT 1\n");
+        }
+	val = crypto_cipher_setkey(Device.cipher, crypto_key, KEY_SIZE);
+
+	if (val != 0) 
+        {
+        printk("FAIL POINT 2\n");
+        }
         major_num = register_blkdev(major_num, "sbd");
 	if (major_num < 0) {
 		printk(KERN_WARNING "sbd: unable to get major number\n");
