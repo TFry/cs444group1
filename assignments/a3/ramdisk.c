@@ -139,7 +139,7 @@ static int __init sbd_init(void) {
 
         Device.cipher = crypto_alloc_cipher("aes", 4, CRYPTO_ALG_ASYNC);
 
-	if (IS_ERR(Device.blkcipher)) 
+	if (IS_ERR(Device.cipher)) 
         {
         printk("FAIL POINT 1\n");
         }
