@@ -146,7 +146,7 @@ static int __init sbd_init(void) {
 	if (IS_ERR(cryptography))
         {
         printk("sbd: Failure with cipher\n");
-        goto free_mem;
+        goto out;
         }
 
         Device.gd = alloc_disk(16);
