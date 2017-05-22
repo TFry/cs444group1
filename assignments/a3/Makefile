@@ -1,13 +1,40 @@
 obj-m := ramdisk.o
-KDIR := ../../../linux-yocto-3.14
+TARGET=writeup
+KDIR := ../../../fresh-dir
 PWD := $(shell pwd)
 
 
-all:
-	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
-clean:
-	rm -f *.pdf *.ps *.dvi *.out *.log *.aux *.bbl *.blg *.pyg *-blx.bib *.run.xml
-	rm -f *.o *.ko *.ko.unsigned modules.order Module.symvers ebd.mod.c .*.cmd
-	rm -rf .tmp_versions
+all: pdf mod
 
-.PHONY: all show clean ps pdf showps debug test
+default: pdf
+
+mod:
+	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
+
+all: pdf
+
+dvi: ${TARGET}.tex 
+	latex ${TARGET}.tex
+	latex $(TARGET).tex
+
+ps: dvi
+	dvips -R -Poutline -t letter ${TARGET}.dvi -o ${TARGET}.ps
+
+pdf: ps
+	ps2pdf ${TARGET}.ps
+
+clean:
+	rm -f *.aux
+	rm -f *.log
+	rm -f *.dvi
+	rm -f *.out
+	rm -rf .tmp_versions
+	rm -f ${TARGET}.pdf
+	rm -f *.ps
+	rm -f *.o 
+	rm -f *.ko 
+	rm -f *.ko.unsigned 
+	rm -f modules.order 
+	rm -f Module.symvers ramdisk.mod.c 
+	rm -f .*.cmd
+
