@@ -62,15 +62,18 @@ static void sbd_transfer(struct sbd_device *dev, sector_t sector,
 	if (write)
         {
         
-        for (i = 0; i < nbytes; i += crypto_cipher_blocksize(cryptography)) {
-            crypto_cipher_encrypt_one(cryptography, start + i, buffer + i);
-        }
+        	for (i = 0; i < nbytes; i += crypto_cipher_blocksize(cryptography))
+		{
+            		crypto_cipher_encrypt_one(cryptography, start + i, buffer + i);
+        	}
 
         }
 	else
         {
-        for (i = 0; i < nbytes; i += crypto_cipher_blocksize(cryptography)) {
-            crypto_cipher_decrypt_one(cryptography, start + i, buffer + i);
+        	for (i = 0; i < nbytes; i += crypto_cipher_blocksize(cryptography))
+        	{
+        	    crypto_cipher_decrypt_one(cryptography, start + i, buffer + i); 
+        	}
         }
 }
 
