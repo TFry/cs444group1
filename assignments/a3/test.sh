@@ -14,7 +14,7 @@ echo "Writing 'Testing homework 3!' to a file on mounted disk."
 
 echo "Testing homework 3!" > /mnt/test/test.txt
 
-echo "Wrote to file.\n"
+echo "Wrote to file."
 
 echo "Try to search for 'Testing homework 3!' on /dev/sbd0. Nothing should appear."
 
