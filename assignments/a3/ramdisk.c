@@ -75,14 +75,14 @@ static void sbd_transfer(struct sbd_device *dev, sector_t sector,
 	}
 	if (write)
         {
-		for (i = 0; i < nbytes; i += crypto_cipher_blocksize(cryp))
+		for (i = 0; i < nbytes; i += crypto_cipher_blocksize(crypto))
 		{
 			crypto_cipher_encrypt_one(crypto, loc + i, buffer + i);
 		}
 	}
 	
 	else{
-		for (i = 0; i < nbytes; i += crypto_cipher_blocksize(cryp)) 
+		for (i = 0; i < nbytes; i += crypto_cipher_blocksize(crypto)) 
 		{
 			crypto_cipher_decrypt_one(crypto, loc + i, buffer + i);
 		}
