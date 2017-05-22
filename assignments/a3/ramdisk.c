@@ -1,4 +1,3 @@
-
 /*
  * heavily referenced from http://blog.superpat.com/2010/05/04/a-simple-block-driver-for-linux-kernel-2-6-31/
  * to at least get it to compile
@@ -6,10 +5,11 @@
  * and man pages for cryptography
  */
 
+
 #include <linux/module.h>
 #include <linux/moduleparam.h>
 #include <linux/init.h>
-#include <linux/crypto.h>
+
 #include <linux/kernel.h> /* printk() */
 #include <linux/fs.h>     /* everything... */
 #include <linux/errno.h>  /* error codes */
@@ -18,6 +18,7 @@
 #include <linux/genhd.h>
 #include <linux/blkdev.h>
 #include <linux/hdreg.h>
+#include <linux/crypto.h>
 
 MODULE_LICENSE("Dual BSD/GPL");
 static char *Version = "1.4";
@@ -29,10 +30,26 @@ module_param(logical_block_size, int, 0);
 static int nsectors = 1024; /* How big the drive is */
 module_param(nsectors, int, 0);
 
+static char *key = "cs444hw3";
+struct crypto_cipher *crypto;
+static int key_len = 8;
+
+module_param(key, charp, 0);
+
+/*
+ * We can tweak our hardware sector size, but the kernel talks to us
+ * in terms of small sectors, always.
+ */
 #define KERNEL_SECTOR_SIZE 512
 
+/*
+ * Our request queue.
+ */
 static struct request_queue *Queue;
 
+/*
+ * The internal representation of our device.
+ */
 static struct sbd_device {
 	unsigned long size;
 	spinlock_t lock;
@@ -40,20 +57,17 @@ static struct sbd_device {
 	struct gendisk *gd;
 } Device;
 
-#define KEY_SIZE 8
-
-static char *key = "cs444hw3";
-struct crypto_cipher *cryptography;
-
+/*
+ * Handle an I/O request.
+ */
 static void sbd_transfer(struct sbd_device *dev, sector_t sector,
 		unsigned long nsect, char *buffer, int write) {
 	unsigned long offset = sector * logical_block_size;
 	unsigned long nbytes = nsect * logical_block_size;
-	unsigned long i;
-	u8*           start = dev->data + offset;
+	unsigned long int i;
+        u8               *loc = dev->data + offset;;
 
-
-	crypto_cipher_setkey(cryptography, key, KEY_SIZE);
+        crypto_cipher_setkey(crypto, key, key_len);
 
 	if ((offset + nbytes) > dev->size) {
 		printk (KERN_NOTICE "sbd: Beyond-end write (%ld %ld)\n", offset, nbytes);
@@ -61,20 +75,18 @@ static void sbd_transfer(struct sbd_device *dev, sector_t sector,
 	}
 	if (write)
         {
-        
-        	for (i = 0; i < nbytes; i += crypto_cipher_blocksize(cryptography))
+		for (i = 0; i < nbytes; i += crypto_cipher_blocksize(cryp))
 		{
-            		crypto_cipher_encrypt_one(cryptography, start + i, buffer + i);
-        	}
-
-        }
-	else
-        {
-        	for (i = 0; i < nbytes; i += crypto_cipher_blocksize(cryptography))
-        	{
-        	    crypto_cipher_decrypt_one(cryptography, start + i, buffer + i); 
-        	}
-        }
+			crypto_cipher_encrypt_one(crypto, loc + i, buffer + i);
+		}
+	}
+	
+	else{
+		for (i = 0; i < nbytes; i += crypto_cipher_blocksize(cryp)) 
+		{
+			crypto_cipher_decrypt_one(crypto, loc + i, buffer + i);
+		}
+	}
 }
 
 static void sbd_request(struct request_queue *q) {
@@ -124,32 +136,36 @@ static struct block_device_operations sbd_ops = {
 };
 
 static int __init sbd_init(void) {
+
+	crypto = crypto_alloc_cipher("aes", 0, 0);
+
+	/*
+	 * Set up our internal device.
+	 */
 	Device.size = nsectors * logical_block_size;
 	spin_lock_init(&Device.lock);
 	Device.data = vmalloc(Device.size);
 	if (Device.data == NULL)
 		return -ENOMEM;
-
+	/*
+	 * Get a request queue.
+	 */
 	Queue = blk_init_queue(sbd_request, &Device.lock);
 	if (Queue == NULL)
 		goto out;
 	blk_queue_logical_block_size(Queue, logical_block_size);
-
+	/*
+	 * Get registered.
+	 */
 	major_num = register_blkdev(major_num, "sbd");
 	if (major_num < 0) {
 		printk(KERN_WARNING "sbd: unable to get major number\n");
 		goto out;
 	}
-        
-        cryptography = crypto_alloc_cipher("aes", 0, 0);
-	
-	if (IS_ERR(cryptography))
-        {
-        printk("sbd: Failure with cipher\n");
-        goto out;
-        }
-
-        Device.gd = alloc_disk(16);
+	/*
+	 * And the gendisk structure.
+	 */
+	Device.gd = alloc_disk(16);
 	if (!Device.gd)
 		goto out_unregister;
 	Device.gd->major = major_num;
@@ -177,6 +193,7 @@ static void __exit sbd_exit(void)
 	unregister_blkdev(major_num, "sbd");
 	blk_cleanup_queue(Queue);
 	vfree(Device.data);
+	crypto_free_cipher(crypto);
 }
 
 module_init(sbd_init);
