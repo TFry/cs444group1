@@ -43,7 +43,7 @@ static struct sbd_device {
 #define KEY_SIZE 8
 
 static char *key = "cs444hw3";
-struct crypto_cipher *cryptogaphy;
+struct crypto_cipher *cryptography;
 
 static void sbd_transfer(struct sbd_device *dev, sector_t sector,
 		unsigned long nsect, char *buffer, int write) {
@@ -63,14 +63,14 @@ static void sbd_transfer(struct sbd_device *dev, sector_t sector,
         {
         
         for (i = 0; i < nbytes; i += crypto_cipher_blocksize(cryptography)) {
-            crypto_cipher_encrypt_one(crypt, start + i, buffer + i);
+            crypto_cipher_encrypt_one(cryptography, start + i, buffer + i);
         }
 
         }
 	else
         {
         for (i = 0; i < nbytes; i += crypto_cipher_blocksize(cryptography)) {
-            crypto_cipher_decrypt_one(crypt, start + i, buffer + i);
+            crypto_cipher_decrypt_one(cryptography, start + i, buffer + i);
         }
 }
 
