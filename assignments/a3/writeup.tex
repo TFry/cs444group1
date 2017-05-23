@@ -1,0 +1,103 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage[margin=0.75in]{geometry}
+\begin{document}
+\section{Plan to implement the necessary algorithm}
+After doing some research, we found a basic, working version of SBD. Then, we just added a few small components. Besides using basic initialization and clean-up function provided by Linux Crypto, the only thing needed was to use provided functions to encrypt/decrypt one block at a time.
+
+\section{Main Point of this Assignment}
+The main point of this assignment was to implement a block device in our local linux 
+kernel build that encrypts and decrypts data when it is used to write or read data. Our main
+goal for this assignment was to find a pre-written block device driver, and learn how to 
+build it and use it in our kernel to accomplish the assignment's requirements. On top of that 
+we were supposed to use one of the provided cryptography files found in the kernel /crypto 
+folder in order to properly encrypt and decrypt the I/O that went through the device.
+\\\\
+The main point of the concurrency assignment was to (obviously) work on our concurrency skills.
+This one was different than the last two assignments due to the three different tasks all
+having to work in unison. Even in the little book of semaphores this problem is listed in the
+"non-classical problems", so it seems like we're straying away from the more traditional 
+problems to ones that might show up in the "real world".
+\section{How did you ensure your solution was correct? Testing details, for instance.}
+We tested the concurrency by writing up a function that prints out the current list at every
+step. This coupled with the print statements associated with each thread (that prints out 
+whether an item was searched for, inserted, or deleted) paints a picture of what is happening
+behind the scenes. You can see the list before a delete thread comes in and after it comes in
+and you will see an element omitted from the second list, proving that it was deleted
+successfully.
+
+For the block device, we have a script that loads the device as a module, creates a filesystem, mounts it, and writes and reads to it to make sure everything works as intended.
+
+\section{What did you learn?}
+We learned how to correctly compile a .c file and produce a .ko file which acts as a module
+in the kernel. This module is then mounted onto the kernel and can be immediately put to use.
+Not only that, but we learned how to use the Linux kernel crypto API and couple that with our
+device implementation to create a functional device driver that can encrypt and decrypt the
+data that it processes.
+\\\\
+For the concurrency assignment, we learned how to make use of multiple semaphores at once
+to orchestrate more than 2 moving parts. We learned how to take the blocking requirements
+and translate those directly to the semaphores in the code and prevent any operations that
+weren't allowed.
+
+\section*{Version Control Log}
+\begin{tabular}{ l | c | r }
+  \hline	
+ c2e835d &	heidiaclayton     &	Mon May 22 01:11:11 2017 -0700 \\
+0b731ba &	heidiaclayton     &	Mon May 22 00:58:25 2017 -0700 \\
+90a4fbc &	heidiaclayton     &	Mon May 22 00:36:13 2017 -0700 \\
+a6e6511 &	heidiaclayton     &	Mon May 22 00:26:20 2017 -0700 \\
+dad7b1f &	heidiaclayton     &	Mon May 22 00:23:25 2017 -0700 \\
+6458b3d &	heidiaclayton     &	Sun May 21 23:14:45 2017 -0700 \\
+bed66cb &	heidiaclayton     &	Sun May 21 23:13:49 2017 -0700 \\
+114b31b &	heidiaclayton     &	Sun May 21 23:10:42 2017 -0700 \\
+0d4993f &	heidiaclayton     &	Sun May 21 23:08:24 2017 -0700 \\
+07ea9ad &	heidiaclayton     &	Sun May 21 03:39:58 2017 -0700 \\
+b0f4cb1 &	heidiaclayton     &	Sun May 21 03:38:54 2017 -0700 \\
+613c019 &	heidiaclayton     &	Sun May 21 02:57:24 2017 -0700 \\
+ff2034b &	heidiaclayton     &	Sun May 21 02:53:57 2017 -0700 \\
+72a45a8 &	TannerFry         &	Thu May 18 12:42:38 2017 -0700 \\
+1aecc87 &	TannerFry         &	Thu May 18 12:40:02 2017 -0700 \\
+558d0c5 &	heidiaclayton     &	Thu May 18 12:33:36 2017 -0700 \\
+226cced &	davidteofilovic	  & Thu May 18 12:14:58 2017 -0700 \\
+81f390e &	davidteofilovic   &	Thu May 18 12:12:49 2017 -0700 \\
+4ed7d2f &	heidiaclayton     &	Thu May 18 10:41:54 2017 -0700 \\
+91e79af &	heidiaclayton     &	Tue May 16 18:56:21 2017 -0700 \\
+a5ead0c &	heidiaclayton     &	Tue May 16 11:24:48 2017 -0700 \\
+1f5a668 &	heidiaclayton     &	Mon May 15 12:52:22 2017 -0700 \\
+b296aa6 &	heidiaclayton     &	Sun May 14 22:28:48 2017 -0700 \\
+a6c997b &	heidiaclayton     &	Thu May 11 11:05:36 2017 -0700 \\
+70cab44 &	heidiaclayton     &	Thu May 11 11:02:49 2017 -0700 \\
+be081b6 &	heidiaclayton     &	Thu May 11 10:28:08 2017 -0700 \\
+390cc1f &	heidiaclayton     &	Thu May 11 10:16:13 2017 -0700 \\ 
+   \hline  
+\end{tabular}
+
+\section*{Work Log}
+\subsection*{David}
+We started the assignment pretty early, which was good because we got a lot of the ground 
+work out of the way and asked Kevin a few questions before ultimately meeting again. During
+recitation Heidi gave us a great head start on the concurrency assignment. Later that week,
+we met up again and I primarily worked on the concurrency. I remembered in class Kevin
+mentioned that the little book of semaphores would be a big help, so I found a copy online 
+and looked at the description of the problem in there. From there I stripped out our current
+implementation, which was trying to use both semaphores and thread mutex locks, and just
+rewrote the permission logic to just use semaphores. Using the head start Heidi gave us and
+the pseudo-code from the little book of semaphores, I was able to write it in a way that
+satisfied all the requirements.
+
+\subsection*{Heidi}
+During week 6, David and I met to start preliminary work on the assignment, which was mainly research. During week 7, I implemented a primary version of the concurrency that was barely functional. Then, David debugged it and made it work completely. Tanner worked on a primary version of the block device which I then worked with to create the final version which ended up being quite frustrating. Turns out, I flipped two parameters in the decrypt function. 
+
+\subsection{Tanner}
+We did a first run over of the assignment two weeks out to get started. 
+From there we did a bunch of reading and research to figure out what to do.
+The concurrency assignment we started on next, I made a rough working model of it before class.
+Heidi had started on a more structure working code version in class and we ran with that one.
+David and Heidi did most of the work on the concurrency while I started on the assignment.
+I wrote a first pass at encryption block device which should have worked.
+Heidi did some work with it and refactored it twice to get it working.
+Finally I did some document work and polishing and turned everything in. 
+
+\end{document}
