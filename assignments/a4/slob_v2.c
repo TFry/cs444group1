@@ -267,7 +267,7 @@ static void slob_best_fit(struct page *sp, size_t size, int align, struct best_f
                         {
                         	better.prev = prev;
 				better.best = cur;
-				better.cur_align = int(avail) - units + delta;
+				better.cur_align = (int)avail - units + delta;
 				better.frag = aligned;
                                 better.delta = delta;
                                 better.total = avail;
