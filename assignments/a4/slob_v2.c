@@ -146,7 +146,7 @@ struct best_fit
    slob_t *prev;
    slob_t *cur_align;
    slob_t *best;
-   struct slob_page *pg;
+   struct page *pg;
    int size;
    int delta;
    int total;
@@ -157,7 +157,7 @@ struct best_fit
 // initialize struct
 static void init(struct best_fit *info)
 {
-   info->prev = info->cur_aligned = info->best = info->pg = NULL;
+   info->prev = info->cur_align = info->best = info->pg = NULL;
    info->size = info->total = info->delta = info->frag = 0;
 
 }
@@ -166,7 +166,7 @@ static void init(struct best_fit *info)
 static void copy_info(struct best_fit *old, struct best_fit *new)
 {
 	new->prev = old->prev;
-        new->cur_aligned = old->cur_aligned;
+        new->cur_align = old->cur_align;
 	new->best = old->best;
 	new->pg = old->pg;
 	new->size = old->size;
@@ -263,11 +263,11 @@ static void slob_best_fit(struct page *sp, size_t size, int align, struct best_f
 			delta = aligned - cur;
 		}
 		if (avail >= units + delta) { /* room enough? */
-			if (!better.best || better.frag > (delta - units - size))
+			if (!better.best || better.frag > (avail - units + delta))
                         {
                         	better.prev = prev;
 				better.best = cur;
-				better.cur_align = delta - total - size;
+				better.cur_align = avail - units + delta;
 				better.frag = aligned;
                                 better.delta = delta;
                                 better.total = avail;
@@ -293,7 +293,7 @@ static void *slob_page_alloc(size_t size, int align, struct best_fit *cur_fit)
 	if (cur_fit->delta) { /* need to fragment head to align? */
 		next = slob_next(cur_fit->best);
 		set_slob(cur_fit->cur_align, cur_fit->total - cur_fit->delta, next);
-		set_slob(cur_fit->cur, cur_fit->delta, cur_fit->cur_align);
+		set_slob(cur_fit->best, cur_fit->delta, cur_fit->cur_align);
 		cur_fit->prev = cur_fit->best;
 		cur_fit->best = cur_fit->cur_align;
 		cur_fit->total = slob_units(cur_fit->best);
@@ -304,16 +304,16 @@ static void *slob_page_alloc(size_t size, int align, struct best_fit *cur_fit)
 		if (cur_fit->prev)
 			set_slob(cur_fit->prev, slob_units(cur_fit->prev), next);
 		else
-			cur_fit->pg->freelist = next;
+			cur_fit->pg->free = next;
 	} else { /* fragment */
 		if (cur_fit->prev)
 			set_slob(cur_fit->prev, slob_units(cur_fit->prev), cur_fit->best + cur_fit->size);
 		else
-			cur_fit->pg->freelist = cur_fit->best + cur_fit->size;
-		set_slob(cur_fit->best + cur_fit->size, cur_fit->total - cur_fit->units, next);
+			cur_fit->pg->free = cur_fit->best + cur_fit->size;
+		set_slob(cur_fit->best + cur_fit->size, cur_fit->total - cur_fit->size, next);
 	}
 
-	cur_fit->pg->units -= cur_fit->units;
+	cur_fit->pg->units -= cur_fit->size;
 	if (!cur_fit->pg->units)
 		clear_slob_page_free(cur_fit->pg);
 	return cur_fit->best;
