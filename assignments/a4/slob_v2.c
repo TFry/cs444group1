@@ -74,7 +74,7 @@
 
 #include "slab.h"
 
-typedef struct
+struct
 {
    slob_t *prev;
    slob_t *cur_align;
@@ -154,7 +154,7 @@ struct slob_rcu {
 static DEFINE_SPINLOCK(slob_lock);
 
 // initialize struct
-static void init(best_fit *info)
+static void init(struct best_fit *info)
 {
    info->prev = info->cur_aligned = info->best = info->pg = NULL;
    info->size = info->total = info->delta = info->frag = 0;
@@ -162,7 +162,7 @@ static void init(best_fit *info)
 }
 
 // copy info to new struct
-static void copy_info(best_fit *old, best_fit *new)
+static void copy_info(struct best_fit *old, struct best_fit *new)
 {
 	new->prev = old->prev;
         new->cur_aligned = old->cur_aligned;
@@ -246,11 +246,11 @@ static void slob_free_pages(void *b, int order)
 	free_pages((unsigned long)b, order);
 }
 
-static void *slob_best_fit(struct page *sp, size_t size, int align, best_fit *cur_fit)
+static void slob_best_fit(struct page *sp, size_t size, int align, struct best_fit *cur_fit)
 {
 	slob_t *prev, *cur, *aligned = NULL;
 	int delta = 0, units = SLOB_UNITS(size);
-        best_fit better;
+        struct best_fit better;
 
         init(&better);
 
@@ -262,7 +262,7 @@ static void *slob_best_fit(struct page *sp, size_t size, int align, best_fit *cu
 			delta = aligned - cur;
 		}
 		if (avail >= units + delta) { /* room enough? */
-			if (!better.best || better.frag > (delta - total - size)
+			if (!better.best || better.frag > (delta - units - size))
                         {
                         	better.prev = prev;
 				better.best = cur;
@@ -285,12 +285,12 @@ static void *slob_best_fit(struct page *sp, size_t size, int align, best_fit *cu
 }
 
 // basically just kept the inner loop since we find best fit in another function.
-static void *slob_page_alloc(size_t size, int align, best_fit *cur_fit)
+static void *slob_page_alloc(size_t size, int align, struct best_fit *cur_fit)
 {
 	slob_t *next;
 
 	if (cur_fit->delta) { /* need to fragment head to align? */
-		next = slob_next(cur);
+		next = slob_next(cur_fit->best);
 		set_slob(cur_fit->cur_align, cur_fit->total - cur_fit->delta, next);
 		set_slob(cur_fit->cur, cur_fit->delta, cur_fit->cur_align);
 		cur_fit->prev = cur_fit->best;
@@ -328,7 +328,7 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 	struct list_head *slob_list;
 	slob_t *b = NULL;
 	unsigned long flags;
-	best_fit cur_fit, better_fit;
+	struct best_fit cur_fit, better_fit;
 
 	init(&cur_fit);
 
