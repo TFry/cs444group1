@@ -74,18 +74,6 @@
 
 #include "slab.h"
 
-struct best_fit
-{
-   slob_t *prev;
-   slob_t *cur_align;
-   slob_t *best;
-   struct slob_page *pg;
-   int size;
-   int delta;
-   int total;
-   size_t frag;
-};
-
 
 /*
  * slob_block has a field 'units', which indicates size of block if +ve,
@@ -152,6 +140,19 @@ struct slob_rcu {
  * slob_lock protects all slob allocator structures.
  */
 static DEFINE_SPINLOCK(slob_lock);
+
+struct best_fit
+{
+   slob_t *prev;
+   slob_t *cur_align;
+   slob_t *best;
+   struct slob_page *pg;
+   int size;
+   int delta;
+   int total;
+   size_t frag;
+};
+
 
 // initialize struct
 static void init(struct best_fit *info)
