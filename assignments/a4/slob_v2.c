@@ -267,7 +267,7 @@ static void slob_best_fit(struct page *sp, size_t size, int align, struct best_f
                         {
                         	better.prev = prev;
 				better.best = cur;
-				better.cur_align = avail - units + delta;
+				better.cur_align = int(avail) - units + delta;
 				better.frag = aligned;
                                 better.delta = delta;
                                 better.total = avail;
@@ -304,12 +304,12 @@ static void *slob_page_alloc(size_t size, int align, struct best_fit *cur_fit)
 		if (cur_fit->prev)
 			set_slob(cur_fit->prev, slob_units(cur_fit->prev), next);
 		else
-			cur_fit->pg->free = next;
+			cur_fit->pg->freelist = next;
 	} else { /* fragment */
 		if (cur_fit->prev)
 			set_slob(cur_fit->prev, slob_units(cur_fit->prev), cur_fit->best + cur_fit->size);
 		else
-			cur_fit->pg->free = cur_fit->best + cur_fit->size;
+			cur_fit->pg->freelist = cur_fit->best + cur_fit->size;
 		set_slob(cur_fit->best + cur_fit->size, cur_fit->total - cur_fit->size, next);
 	}
 
