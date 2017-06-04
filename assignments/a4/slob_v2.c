@@ -74,7 +74,7 @@
 
 #include "slab.h"
 
-struct
+struct best_fit
 {
    slob_t *prev;
    slob_t *cur_align;
@@ -84,7 +84,7 @@ struct
    int delta;
    int total;
    size_t frag;
-} best_fit;
+};
 
 
 /*
