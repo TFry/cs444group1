@@ -138,7 +138,7 @@ int main(int argc, char* arvg[])
 
 	ts.tv_sec = 10;
 	
-	while(1){
+	
 		// Initialize the smoker and admin semaphores
 		for (int i = 0; i < 3; ++i)
 		{
@@ -154,6 +154,7 @@ int main(int argc, char* arvg[])
 		// Create smoker threads
 		pthread_t smoker_threads[6];
 		// Pass ids to smoker threads
+	
 		for (int i = 0; i < 6; ++i)
 		{
 			smoker_ids[i] = i;
@@ -187,7 +188,7 @@ int main(int argc, char* arvg[])
 				return -1;
 			}
 		}
-		
+	while(1){	
 		// Make sure all the smokers are done smoking
 		for (int i = 0; i < 6; ++i)
 		{
