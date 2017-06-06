@@ -138,7 +138,7 @@ int main(int argc, char* arvg[])
 
 	ts.tv_sec = 10;
 	
-	
+	while(1){
 		// Initialize the smoker and admin semaphores
 		for (int i = 0; i < 3; ++i)
 		{
@@ -193,6 +193,6 @@ int main(int argc, char* arvg[])
 		{
 			pthread_join(smoker_threads[i], NULL);
 		}
-	
+	}
 	return 0;
 }
