@@ -48,7 +48,8 @@ void* smoker(void* arg)
 	int smoker_id = *(int*) arg;
 	int object_num   = smoker_id % 3;
 	//Going to smoke four times
-	for (int i = 0; i < 3; ++i)
+	while(1)
+	//for (int i = 0; i < 3; ++i)
 	{
 		//Outputting info
 		//Waiting for correct items to be available
@@ -70,8 +71,8 @@ void* smoker(void* arg)
 void* agent(void* arg)
 {
 	int agent_id = *(int*) arg;
-
-	for (int i = 0; i < 10; ++i)
+	while(1)
+	//for (int i = 0; i < 10; ++i)
 	{
 		usleep(rand() % 200000);
 
@@ -96,7 +97,7 @@ void* admin(void* arg)
 	int admin_id = *(int*) arg;
 	// Doing 15 cycles
 	// Might change to while loop
-	while(true)
+	while(1)
 	{
 		// Waiting until needed
 		sem_wait(&admin_semaphores[admin_id]);
@@ -188,12 +189,12 @@ int main(int argc, char* arvg[])
 				return -1;
 			}
 		}
-	while(1){	
+		
 		// Make sure all the smokers are done smoking
 		for (int i = 0; i < 6; ++i)
 		{
 			pthread_join(smoker_threads[i], NULL);
 		}
-	}
+	
 	return 0;
 }
