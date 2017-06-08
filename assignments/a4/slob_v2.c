@@ -278,7 +278,7 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 	slob_t *b = NULL;
 	unsigned long flags;
 	units_free = 0;
-	best = sp;
+	best = NULL;
 	unsigned long units, i;
 	
 	printk("SLOB allocator.\n");
@@ -311,7 +311,7 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 		for (i = 0; i < 1000; i++)
 		{
 			units = list_entry(iter->next, struct page, list)->units;	
-			if (units >= SLOB_UNITS(size) && units < best->units)
+			if (!best || (units >= SLOB_UNITS(size) && units < best->units))
 			{
 				best = list_entry(iter->next, struct page, list);
 			}
