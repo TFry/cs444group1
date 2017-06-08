@@ -315,12 +315,13 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 			{
 				best = list_entry(iter->next, struct page, list);
 			}
-			iter = iter->next;
 
 			if (sp == list_entry(iter->next, struct page, list))
 			{
 				break;
 			}
+
+			iter = iter->next;
 		}
 
 		prev = best->list.prev;
