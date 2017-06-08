@@ -313,9 +313,14 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 		while(helper < 100)
 		{
 			units = list_entry(iter->next, struct page, list)->units;	
-			if (!best || (units >= SLOB_UNITS(size) && units < best->units))
+			/*if (!best || (units >= SLOB_UNITS(size) && units < best->units))
 			{
 				best = list_entry(iter->next, struct page, list);
+			}*/
+			if(list_entry(iter->next, struct page, list)->units >= SLOB_UNITS(size)){
+				if(list_entry(iter->next, struct page, list)->units < best->units){
+					best = list_entry(iter->next,struct page, list);
+				}
 			}
 
 			if (sp == list_entry(iter->next, struct page, list))
