@@ -308,7 +308,9 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 		// keep track of best fit
 		iter = slob_list;
 		units_free += best->units;	
-		for (i = 0; i < 1000; i++)
+		//for (i = 0; i < 1000; i++)
+			int helper = 0;
+		while(helper < 100)
 		{
 			units = list_entry(iter->next, struct page, list)->units;	
 			if (!best || (units >= SLOB_UNITS(size) && units < best->units))
@@ -320,7 +322,7 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 			{
 				break;
 			}
-
+			helper += 1;
 			iter = iter->next;
 		}
 
@@ -343,6 +345,8 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 
 	/* Not enough space: must allocate a new page */
 	if (!b) {
+		pages++;
+		units_free--;
 		b = slob_new_pages(gfp & ~__GFP_ZERO, 0, node);
 		if (!b)
 			return NULL;
@@ -358,7 +362,7 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 		b = slob_page_alloc(sp, size, align);
 		BUG_ON(!b);
 		spin_unlock_irqrestore(&slob_lock, flags);
-		pages++;
+
 	}
 	if (unlikely((gfp & __GFP_ZERO) && b))
 		memset(b, 0, size);
