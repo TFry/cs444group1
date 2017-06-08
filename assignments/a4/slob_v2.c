@@ -317,7 +317,7 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 			}
 			iter = iter->next;
 
-			if (sp == list_entry(iter->next, struct page, list)
+			if (sp == list_entry(iter->next, struct page, list))
 			{
 				break;
 			}
