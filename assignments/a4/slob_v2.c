@@ -307,15 +307,20 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 		
 		// keep track of best fit
 		iter = slob_list;
-		units_free += best->units;
-		units = list_entry(iter->next, struct page, list)->units;	
+		units_free += best->units;	
 		for (i = 0; i < 1000; i++)
 		{
+			units = list_entry(iter->next, struct page, list)->units;	
 			if (units >= SLOB_UNITS(size) && units < best->units)
 			{
 				best = list_entry(iter->next, struct page, list);
 			}
 			iter = iter->next;
+
+			if (sp == list_entry(iter->next, struct page, list)
+			{
+				break;
+			}
 		}
 
 		prev = best->list.prev;
