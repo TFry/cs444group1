@@ -274,10 +274,14 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 {
 	struct page *sp, *best = NULL;
 	struct list_head *prev;
-	struct list_head *slob_list, *tmp;
+	struct list_head *slob_list, *iter;
 	slob_t *b = NULL;
 	unsigned long flags;
 	units_free = 0;
+	best = sp;
+	unsigned long units, i;
+	
+	printk("SLOB allocator.\n");
 
 	if (size < SLOB_BREAK1)
 		slob_list = &free_slob_small;
@@ -302,35 +306,31 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 			continue;
 		
 		// keep track of best fit
-		if (!best || (sp->units < best->units))
+		iter = slob_list;
+		units_free += best->units;
+		units = list_entry(iter->next, struct page, list)->units;	
+		for (i = 0; i < 1000; i++)
 		{
-			best = sp;
+			if (units >= SLOB_UNITS(size) && units < best->units)
+			{
+				best = list_entry(iter->next, struct page, list);
+			}
+			iter = iter->next;
 		}
 
-
-	}
-
-	if (best)
-	{
+		prev = best->list.prev;
 		b = slob_page_alloc(best, size, align);
-	}
+		
+		if (!b)
+			continue;
 
-	tmp = &free_slob_small;
-	list_for_each_entry(sp, tmp, list)
-	{
-		units_free += sp->units;
-	}
-
-	tmp = &free_slob_medium;
-	list_for_each_entry(sp, tmp, list)
-	{
-		units_free += sp->units;
-	}
-
-	tmp = &free_slob_large;
-	list_for_each_entry(sp, tmp, list)
-	{
-		units_free += sp->units;
+		/* Improve fragment distribution and reduce our average
+		 * search time by starting our next search here. (see
+		 * Knuth vol 1, sec 2.5, pg 449) */
+		if (prev != slob_list->prev &&
+				slob_list->next != prev->next)
+			list_move_tail(slob_list, prev->next);
+		break;
 	}
 
 	spin_unlock_irqrestore(&slob_lock, flags);
@@ -670,12 +670,12 @@ void __init kmem_cache_init_late(void)
 	slab_state = FULL;
 }
 
-asmlinkage long sys_slob_used(void)
+asmlinkage long sys_slob_units_used(void)
 {
 	return SLOB_UNITS(PAGE_SIZE) * pages;
 }
 
-asmlinkage long sys_slob_free(void)
+asmlinkage long sys_slob_units_free(void)
 {
 	return units_free;
 }
