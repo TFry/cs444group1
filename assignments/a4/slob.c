@@ -71,8 +71,13 @@
 #include <trace/events/kmem.h>
 
 #include <linux/atomic.h>
+#include <linux/linkage.h>
+#include <linux/syscalls.h>
 
 #include "slab.h"
+
+unsigned long pages;
+unsigned long units_free;
 /*
  * slob_block has a field 'units', which indicates size of block if +ve,
  * or offset of next block if -ve (in SLOB_UNITs).
@@ -218,99 +223,48 @@ static void *slob_page_alloc(struct page *sp, size_t size, int align)
 {
 	slob_t *prev, *cur, *aligned = NULL;
 	int delta = 0, units = SLOB_UNITS(size);
-	slob_t *best = NULL, *best_prev = NULL, *best_aligned = NULL; 
-	
-	slobidx_t avail;
-	
-	int best_delta = 0; 
-	int printer = 0;
-	
-	if(print_helper > 5000){
-		print = 1;
-		printk("Request Size: %u \n", units);
-		printk("Available Spaces: ");
-	}
-	
-	slobidx_t best_size 0;
 
 	for (prev = NULL, cur = sp->freelist; ; prev = cur, cur = slob_next(cur)) {
-		avail = slob_units(cur);
+		slobidx_t avail = slob_units(cur);
 
 		if (align) {
 			aligned = (slob_t *)ALIGN((unsigned long)cur, align);
 			delta = aligned - cur;
 		}
-		
-		//Adding output statement
-		if(printer){
-			printk("[%u]", slob_units(cur));
+		if (avail >= units + delta) { /* room enough? */
+			slob_t *next;
+
+			if (delta) { /* need to fragment head to align? */
+				next = slob_next(cur);
+				set_slob(aligned, avail - delta, next);
+				set_slob(cur, delta, aligned);
+				prev = cur;
+				cur = aligned;
+				avail = slob_units(cur);
+			}
+
+			next = slob_next(cur);
+			if (avail == units) { /* exact fit? unlink. */
+				if (prev)
+					set_slob(prev, slob_units(prev), next);
+				else
+					sp->freelist = next;
+			} else { /* fragment */
+				if (prev)
+					set_slob(prev, slob_units(prev), cur + units);
+				else
+					sp->freelist = cur + units;
+				set_slob(cur + units, avail - units, next);
+			}
+
+			sp->units -= units;
+			if (!sp->units)
+				clear_slob_page_free(sp);
+			return cur;
 		}
-		
-		//Must also check best fit 
-		if (avail >= units + delta && (best == NULL || avail - (unit + delta) < best_size)) { /* room enough? */
-			//slob_t *next;
-
-			best_aligned = aligned;
-			best_prev = prev;
-			best = cur;
-			best_size = avail - (units + delta);
-			best_delta = delta;
-			
-			//Should best for perfect fit, but ehhh
-			
-		}
-		if (slob_last(cur)){
-			break;
-		}
-	} 
-	
-	if (best != NULL){
-		if(printer) {
-			printk(" , Best: %u\n", slob_units(best));
-		}
-		/****************************************************************************************************
-		Edits here and below **************/
-		slob_t *next = NULL;
-        avail = slob_units(best);
-
-        if (best_delta) { 
-            next = slob_next(best);
-            set_slob(best_aligned, avail - best_delta, next);
-            set_slob(best, best_delta, best_aligned);
-            best_prev = best;
-            best = best_aligned;
-            avail = slob_units(best);
-        }
-
-        next = slob_next(best);
-
-		//If best
-        if (avail == units) { 
-            if (best_prev) {
-                set_slob(best_prev, slob_units(best_prev), next);
-            } else {
-                sp->free = next;
-            }
-        } else { //Otherwise 
-            if (best_prev) {
-                set_slob(best_prev, slob_units(best_prev), best + units);
-            } else {
-                sp->free = best + units;
-            }
-            set_slob(best + units, avail - units, next);
-        }
-        
-        sp->units -= units;
-        if (!sp->units) {
-            clear_slob_page_free(sp);
-        }
-
-        return best;
-    } 
-	else {
-        printk("ERROR: No valid fits found...\n");
-        return NULL;
-    }	
+		if (slob_last(cur))
+			return NULL;
+	}
 }
 
 /*
@@ -318,12 +272,14 @@ static void *slob_page_alloc(struct page *sp, size_t size, int align)
  */
 static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 {
-	struct page *sp;
+	units_free = 0;
+    	struct page *sp, *cur, *best = NULL;
 	struct list_head *prev;
-	struct list_head *slob_list;
+	struct list_head *slob_list, *iter;
 	slob_t *b = NULL;
 	unsigned long flags;
-
+	int i, units;
+	
 	if (size < SLOB_BREAK1)
 		slob_list = &free_slob_small;
 	else if (size < SLOB_BREAK2)
@@ -342,13 +298,33 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 		if (node != NUMA_NO_NODE && page_to_nid(sp) != node)
 			continue;
 #endif
+		iter = slob_list;
+       		units_free += sp->units; 
+		cur = best = sp;
+        	
+
 		/* Enough room on this page? */
 		if (sp->units < SLOB_UNITS(size))
 			continue;
+        	// keep track of best fit. number is arbitrary but helps this run in a reasonable amount of time
+		for(i = 0; i < 50; i++)
+		{
+			units = list_entry(iter->next,struct page,list)->units;
+			if (units >= SLOB_UNITS(size) && units < best->units) 
+			{
+				best = list_entry(iter->next,struct page,list);
+			}
+			
+			// break if we've circled back around
+			if(list_entry(iter->next,struct page,list) == cur)
+				break;
+			
+			iter = iter->next;
+		}
 
 		/* Attempt to alloc */
-		prev = sp->list.prev;
-		b = slob_page_alloc(sp, size, align);
+		prev = best->list.prev;
+		b = slob_page_alloc(best, size, align);
 		if (!b)
 			continue;
 
@@ -379,6 +355,7 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 		b = slob_page_alloc(sp, size, align);
 		BUG_ON(!b);
 		spin_unlock_irqrestore(&slob_lock, flags);
+		pages++;
 	}
 	if (unlikely((gfp & __GFP_ZERO) && b))
 		memset(b, 0, size);
@@ -413,6 +390,7 @@ static void slob_free(void *block, int size)
 		__ClearPageSlab(sp);
 		page_mapcount_reset(sp);
 		slob_free_pages(b, 0);
+		pages--;
 		return;
 	}
 
@@ -693,4 +671,14 @@ void __init kmem_cache_init(void)
 void __init kmem_cache_init_late(void)
 {
 	slab_state = FULL;
+}
+
+asmlinkage long sys_slob_units_used(void)
+{
+	return SLOB_UNITS(PAGE_SIZE) * pages;
+}
+
+asmlinkage long sys_slob_units_free(void)
+{
+	return units_free;
 }
