@@ -77,7 +77,6 @@
 #include "slab.h"
 
 unsigned long pages;
-unsigned long units_free;
 /*
  * slob_block has a field 'units', which indicates size of block if +ve,
  * or offset of next block if -ve (in SLOB_UNITs).
@@ -272,7 +271,6 @@ static void *slob_page_alloc(struct page *sp, size_t size, int align)
  */
 static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 {
-	units_free = 0;
     	struct page *sp, *cur, *best = NULL;
 	struct list_head *prev;
 	struct list_head *slob_list, *iter;
@@ -299,7 +297,6 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 			continue;
 #endif
 		iter = slob_list;
-       		units_free += sp->units; 
 		cur = best = sp;
         	
 
@@ -310,7 +307,6 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 		for(i = 0; i < 50; i++)
 		{
 			units = list_entry(iter->next,struct page,list)->units;
-			units_free += units;
 			if (units >= SLOB_UNITS(size) && units < best->units) 
 			{
 				best = list_entry(iter->next,struct page,list);
@@ -675,12 +671,46 @@ void __init kmem_cache_init_late(void)
 	slab_state = FULL;
 }
 
+unsigned long free_units(void)
+{
+	unsigned long total;
+	struct page *sp;
+	struct list_head *iter;
+	unsigned long flags;
+	spin_lock_irqsave(&slob_lock, flags);
+
+	iter = &free_slob_small;
+	list_for_each_entry(sp, iter, list){
+
+		total += sp->units;	
+	
+	}
+
+	iter = &free_slob_medium;
+	list_for_each_entry(sp, iter, list){
+
+		total += sp->units;	
+	
+	}
+
+	iter = &free_slob_large;
+	list_for_each_entry(sp, iter, list){
+
+		total += sp->units;	
+	
+	}
+
+	spin_unlock_irqrestore(&slob_lock, flags);
+
+	return total;
+}
+
 asmlinkage long sys_slob_units_used(void)
 {
-	return SLOB_UNITS(PAGE_SIZE) * pages;
+	return (SLOB_UNITS(PAGE_SIZE) * pages) - free_units();
 }
 
 asmlinkage long sys_slob_units_free(void)
 {
-	return units_free;
+	return free_units();
 }
