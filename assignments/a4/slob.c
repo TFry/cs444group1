@@ -673,7 +673,7 @@ void __init kmem_cache_init_late(void)
 
 unsigned long free_units(void)
 {
-	unsigned long total;
+	unsigned long total = 0;
 	struct page *sp;
 	struct list_head *iter;
 	unsigned long flags;
