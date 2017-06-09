@@ -3,22 +3,92 @@
 \usepackage{hyperref}
 \usepackage[margin=0.75in]{geometry}
 \begin{document}
-\section{Plan to implement the necessary algorithm}
-Basically, SLOB just allocates the first available page. We will be changing it to allocate the "best fit" page to reduce fragmentation.
-
-\section{Main Point of this Assignment}
-
-\section{How did you ensure your solution was correct? Testing details, for instance.}
-
-\section{What did you learn?}
-
-\section*{Version Control Log}
-
-\section*{Work Log}
-\subsection*{David}
-
-\subsection*{Heidi}
-
+\section{What was the main point of this assignment?}
+The main point of this assignment was to get familiar with 2 popular algorithm implementations
+for memory management in the Linux kernel. Once we learned about these algorithms we were given
+the task to switch out the first-fit algorithm (SLOB) with the best fit algorithm (SLAB). This
+assignment forced us to really think about the low level implementation of memory management 
+inside the kernel in two parts. The first part was the actual swapping of the algorithms. This 
+involves changing the method used to find a place to allocate a page. The second part is actual
+proving that the algorithm we implemented was correctly implemented. In order to do this, the
+assignment also forced us to create a system call that could retrieve the actual memory usage.
+\section{How did we personally attack the problem}
 \subsection{Tanner}
+The first thing I did was some basic research into what the Slob was. 
+Then into how it functions and what its purpose within the Kernel is.
+Once I had a decent understanding of how the Slob functioned I started to create a concept in my mind of how a Slob Slab would work.
+The main difference being that the Slob Slab must be able to do best fit placement rather than first fit.
+This means to place each chunk of data in the best fitting available slot.
+Basically we need a data structure to store the all the available pages and keep track of the current best fit.
+\subsection{Heidi}
+I was unable to make our first meeting to work on this when the concurrency was finished. During our second meeting we looked at references and tried to bang out a first go at our best-fit algorithm. It didn't work so well so I worked on it some more over the weekend and the course of the next week and I managed to figure out how to make a new system call. Thursday of week 10 was stressful as our program would not work during our entire meeting. It would hang and the kernel would not boot. I managed to fix it somehow later that night by just rewriting what I had previously implemented and I apparently fixed it. I wrote a short test as well. 
+
+\subsection{David}
+I started this assignment in the most logical way you could, I looked at the original SLOB 
+implementation located in the /mm/ directory and tried to decompose its functionality function
+by function. It became increasingly clear that the two functions that we would have to pay
+attention to were \textit{slob\_page\_alloc} and  \textit{slob\_alloc}. Slob\_alloc, as the 
+name suggests, is where the actual allocation of the pages is being done. This is where we
+ended up after the first meeting. During our second meeting we found some previous 
+implementations. We wrote what we thought represented the algorithm and how it was meant to be
+implemented but the kernel got hung up every time we tried to boot it. The majority of our time
+on this assignment was spent trying to debug this, and it was a very annoying process. 
+Thankfully, because of Heidi, we persevered and got through the hang up and the kernel booted
+up. Heidi in her own time wrote up a test script for this that showed the differences between
+the two algorithms.
+
+
+\section{Testing Method}
+We implemented system calls that returned the free and used units and then ran a short test script that did some large memory allocations. The ratio of used over free units is as follows: \\
+\[ bestFit = \frac{4672503}{2147337} = 2.176 \]
+
+\[ firstFit = \frac{4672963}{481853} = 9.70 \]
+As you can see, the best-fit method is much less fragmented.
+
+\section{Work Log}
+\begin{enumerate}
+\item May 30th: Concurrency 4 is finished
+\item June 1st: Best-fit allocator is started
+\item June 4th: Best-fit allocator is worked on
+\item June 5th: Concurrency 5 is finished
+\item June 8th: Best-fit allocator is finished
+\end{enumerate}
+
+
+\section{Version Control Log}
+\begin{tabular}{l l l}
+{151eb39} & tfry & Adding concurrency4.c that works! Edited makefile to compile both.\\\hline
+{1c4972b} & heidiaclayton & Add missing include\\\hline
+{894f1cc} & heidiaclayton & Add writeup with preliminary design\\\hline
+{a4b0e63} & tfry & First pass at slob slab\\\hline
+{6c316ee} & heidiaclayton & Attempt 2 at slob slab\\\hline
+{a7b2a79} & heidiaclayton & Debug\\\hline
+{c6b80bc} & heidiaclayton & Debug again\\\hline
+{ec6aa5a} & heidiaclayton & Move struct definition\\\hline
+{35b12d3} & heidiaclayton & More debugging, fix types\\\hline
+{8c360f1} & heidiaclayton & Fix freeing call\\\hline
+{c00ace8} & heidiaclayton & Fix cast\\\hline
+{c1d80ac} & heidiaclayton & Rework, add syscall\\\hline
+{425cade} & tfry & Concurrency5 added - need to make makefile\\\hline
+{efabca0} & tfry & Added while loop to make it run forever\\\hline
+{789a5b5} & tfry & yes\\\hline
+{843ee9c} & tfry & hah\\\hline
+{eb81008} & heidiaclayton & Fix slob allocator.\\\hline
+{34b260b} & heidiaclayton & Move stuff around\\\hline
+{f43ac32} & heidiaclayton & Bug fix\\\hline
+{aedfc0c} & heidiaclayton & Move things again\\\hline
+{e60e4d1} & heidiaclayton & Move things:\\\hline
+{b78cb12} & tfry & Small changes\\\hline
+{43269d4} & tfry & Please god work\\\hline
+{d4379ca} & heidiaclayton & Revised slob\\\hline
+{d3ac3e4} & heidiaclayton & Revise counters\\\hline
+{47a3a1b} & heidiaclayton & Revise sys calls\\\hline
+{8192b2c} & heidiaclayton & Initialize\\\hline
+{d6f2470} & heidiaclayton & Add patch\\\hline
+\end{tabular}
+
+\section{What we learned}
+We learned how to make our own system calls and how to test them out. We also learned a lot about the different slab allocation algorithms and the pros and cons. Best-fit has less fragmentation but can get to be very slow. Slob is faster but it causes a lot of fragmentation.
 
 \end{document}
+
