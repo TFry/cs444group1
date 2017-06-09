@@ -310,6 +310,7 @@ static void *slob_alloc(size_t size, gfp_t gfp, int align, int node)
 		for(i = 0; i < 50; i++)
 		{
 			units = list_entry(iter->next,struct page,list)->units;
+			units_free += units;
 			if (units >= SLOB_UNITS(size) && units < best->units) 
 			{
 				best = list_entry(iter->next,struct page,list);
@@ -391,6 +392,7 @@ static void slob_free(void *block, int size)
 		page_mapcount_reset(sp);
 		slob_free_pages(b, 0);
 		pages--;
+		
 		return;
 	}
 
